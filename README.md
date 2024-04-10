@@ -20,4 +20,4 @@ yarn start  # to run the dev server
 ```
 
 Once it is running, a browser window
-should open with the OpenMRS 3 application. Log in and then navigate to `/openmrs/spa/root`.
+should open with the OpenMRS 3 application. Log in and then navigate to `/openmrs/spa/opencare`.
