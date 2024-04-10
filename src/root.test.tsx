@@ -36,7 +36,7 @@ import Root from "./root.component";
  */
 const mockUseConfig = useConfig as jest.Mock;
 
-it("renders a landing page for the Template app", () => {
+it("renders a landing page for the opencare app", () => {
   const config: Config = { };
   mockUseConfig.mockReturnValue(config);
 
