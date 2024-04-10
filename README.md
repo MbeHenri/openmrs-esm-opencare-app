@@ -16,7 +16,9 @@ In particular, the [Setup](https://o3-docs.openmrs.org/docs/frontend-modules/set
 
 ```sh
 yarn  # to install dependencies
-yarn start  # to run the dev server
+# to run the dev server
+# yarn start --backend=<backend url> --port=<port>
+yarn start --backend=http://localhost/
 ```
 
 Once it is running, a browser window
