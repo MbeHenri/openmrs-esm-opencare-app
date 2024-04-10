@@ -1,6 +1,6 @@
-![Node.js CI](https://github.com/openmrs/openmrs-esm-template-app/workflows/Node.js%20CI/badge.svg)
-
 # openmrs-esm-opencare-app
+
+![Node.js CI](https://github.com/openmrs/openmrs-esm-template-app/workflows/Node.js%20CI/badge.svg)
 
 The OpenMRS Opencare application (micro front-end)
 
@@ -15,10 +15,13 @@ In particular, the [Setup](https://o3-docs.openmrs.org/docs/frontend-modules/set
 ## Running this code
 
 ```sh
-yarn  # to install dependencies
+# to install dependencies
+yarn
+
 # to run the dev server
 # yarn start --backend=<backend url> --port=<port>
 yarn start --backend=http://localhost/
+
 ```
 
 Once it is running, a browser window
