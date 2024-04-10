@@ -4,7 +4,7 @@
 
 The OpenMRS Opencare application (micro front-end)
 
-This repository provides a starting point for creating your own
+This repository provides a starting point for creating a 
 [OpenMRS Microfrontend](https://wiki.openmrs.org/display/projects/OpenMRS+3.0%3A+A+Frontend+Framework+that+enables+collaboration+and+better+User+Experience).
 
 For more information, please see the
