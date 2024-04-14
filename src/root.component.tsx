@@ -18,11 +18,11 @@ import { Home } from "./home/home.component";
 
 const Root: React.FC = () => {
   // const { t } = useTranslation();
+  //const basename = window.getOpenmrsSpaBase() + "home/opencare";
   const basename = window.getOpenmrsSpaBase() + "opencare";
 
   return (
     <BrowserRouter basename={basename}>
-      <Home />
       <Routes>
         <Route path="/meeting" element={<Meeting />} />
         <Route path="/payment" element={<Payment />} />

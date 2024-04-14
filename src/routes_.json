@@ -6,8 +6,18 @@
   },
   "extensions": [
     {
+      "component": "home",
+      "name": "opencare-home-left-panel-link",
+      "slot": "homepage-dashboard-slot",
+      "meta": {
+        "name": "home",
+        "slot": "opencare-dashboard-slot",
+        "title": "home"
+      }
+    },
+    {
       "component": "meeting",
-      "name": "meeting-home-left-panel-link",
+      "name": "meeting-opencare-home-left-panel-link",
       "slot": "homepage-dashboard-slot",
       "meta": {
         "name": "meeting",
@@ -17,19 +27,18 @@
     },
     {
       "component": "payment",
-      "name": "payment-home-left-panel-link",
+      "name": "payment-opencare-home-left-panel-link",
       "slot": "homepage-dashboard-slot",
       "meta": {
         "name": "payment",
         "slot": "opencare-dashboard-slot",
         "title": "Payment"
       }
-    }
-  ],
-  "pages": [
+    },
     {
       "component": "root",
-      "route": "opencare"
+      "name": "opencare-dashboard",
+      "slot": "home-dashboard-slot"
     }
   ]
 }

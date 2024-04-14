@@ -8,11 +8,12 @@ import { getAsyncLifecycle, defineConfigSchema, getSyncLifecycle } from "@openmr
 import { configSchema } from "./config-schema";
 import { createLeftPanelLink } from "./left-panel-link.component";
 import Root from "./root.component";
+import { PaymentDashboardMeta, meetingDashboardMeta } from "./dashboard.meta";
 
 const moduleName = "@openmrs/esm-opencare-app";
 
 const options = {
-  featureName: "",
+  featureName: "opencare",
   moduleName,
 };
 
@@ -49,24 +50,14 @@ export function startupApp() {
   options
 ); */
 
-export const root = getSyncLifecycle(
-  Root,
-  options
-);
-
+export const root = getSyncLifecycle(Root, options);
 
 export const meeting = getSyncLifecycle(
-  createLeftPanelLink({
-    name: "meeting",
-    title: "Meeting",
-  }),
+  createLeftPanelLink(meetingDashboardMeta),
   options
 );
 
 export const payment = getSyncLifecycle(
-  createLeftPanelLink({
-    name: "payment",
-    title: "Payment",
-  }),
+  createLeftPanelLink(PaymentDashboardMeta),
   options
 );
