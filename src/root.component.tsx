@@ -22,9 +22,8 @@ const Root: React.FC = () => {
 
   return (
     <BrowserRouter basename={basename}>
-      <h1>Welcome to opencare app</h1>
+      <Home />
       <Routes>
-        <Route path="/" element={<Home />} />
         <Route path="/meeting" element={<Meeting />} />
         <Route path="/payment" element={<Payment />} />
       </Routes>
