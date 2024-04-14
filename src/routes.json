@@ -24,6 +24,11 @@
         "slot": "opencare-dashboard-slot",
         "title": "Payment"
       }
+    },
+    {
+      "component": "root",
+      "name": "opencare-dashboard",
+      "slot": "opencare-dashboard-slot"
     }
   ],
   "pages": [
