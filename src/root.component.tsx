@@ -9,18 +9,26 @@
  */
 
 import React from "react";
-import { useTranslation } from "react-i18next";
-import styles from "./root.scss";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { Payment } from "./payment/payment.component";
+import { Meeting } from "./metting/meeting.component";
+import { Home } from "./home/home.component";
+// import { useTranslation } from "react-i18next";
+//import styles from "./root.scss";
 
 const Root: React.FC = () => {
-  const { t } = useTranslation();
+  // const { t } = useTranslation();
+  const basename = window.getOpenmrsSpaBase() + "opencare";
 
   return (
-    <div className={styles.container}>
-      <h3 className={styles.welcome}>
-        {t("welcomeText", "Welcome to the O3 opencare app")}
-      </h3>
-    </div>
+    <BrowserRouter basename={basename}>
+      <h1>Welcome to opencare app</h1>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/meeting" element={<Meeting />} />
+        <Route path="/payment" element={<Payment />} />
+      </Routes>
+    </BrowserRouter>
   );
 };
 

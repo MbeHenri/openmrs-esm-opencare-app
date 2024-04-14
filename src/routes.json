@@ -4,7 +4,28 @@
     "fhir2": ">=1.2",
     "webservices.rest": "^2.24.0"
   },
-  "extensions": [],
+  "extensions": [
+    {
+      "component": "meeting",
+      "name": "meeting-home-left-panel-link",
+      "slot": "homepage-dashboard-slot",
+      "meta": {
+        "name": "meeting",
+        "slot": "opencare-app-slot",
+        "title": "Meeting"
+      }
+    },
+    {
+      "component": "payment",
+      "name": "payment-home-left-panel-link",
+      "slot": "homepage-dashboard-slot",
+      "meta": {
+        "name": "payment",
+        "slot": "opencare-app-slot",
+        "title": "Payment"
+      }
+    }
+  ],
   "pages": [
     {
       "component": "root",

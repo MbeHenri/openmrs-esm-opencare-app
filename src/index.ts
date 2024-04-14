@@ -4,8 +4,10 @@
  * connects the app shell to the React application(s) that make up this
  * microfrontend.
  */
-import { getAsyncLifecycle, defineConfigSchema } from "@openmrs/esm-framework";
+import { getAsyncLifecycle, defineConfigSchema, getSyncLifecycle } from "@openmrs/esm-framework";
 import { configSchema } from "./config-schema";
+import { createLeftPanelLink } from "./left-panel-link.component";
+import Root from "./root.component";
 
 const moduleName = "@openmrs/esm-opencare-app";
 
@@ -40,9 +42,31 @@ export function startupApp() {
  * This named export tells the app shell that the default export of `root.component.tsx`
  * should be rendered when the route matches `root`. The full route
  * will be `openmrsSpaBase() + 'root'`, which is usually
- * `/openmrs/spa/root`.
+ * `/openmrs/spa/opencare`.
  */
-export const root = getAsyncLifecycle(
-  () => import("./root.component"),
+/* export const root = getSyncLifecycle(
+  Root,
+  options
+); */
+
+export const root = getSyncLifecycle(
+  Root,
+  options
+);
+
+
+export const meeting = getSyncLifecycle(
+  createLeftPanelLink({
+    name: "meeting",
+    title: "Meeting",
+  }),
+  options
+);
+
+export const payment = getSyncLifecycle(
+  createLeftPanelLink({
+    name: "payment",
+    title: "Payment",
+  }),
   options
 );
