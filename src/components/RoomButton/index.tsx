@@ -7,6 +7,7 @@ import { TALK_BASE64, TALK_USER } from "../../repositories/env";
 import DoctorService from "../../services/doctor";
 import JoinRoomButton from "./JoinRoomButton";
 import CreateRoomButton from "./CreateRoomButton";
+import BaseService from "../../services/base";
 
 interface Props {
   patientId: string | null;
@@ -20,8 +21,9 @@ const RoomButton: React.FC<Props> = ({
   },
 }) => {
   const [room, setRoom] = useState<Room | null>(null);
-
-  const service = DoctorService.getInstance();
+  const [error, setError] = useState(false);
+  const doctorService = DoctorService.getInstance();
+  const baseService = BaseService.getInstance();
 
   // get a current User Id
   const user = useSession().user;
@@ -31,12 +33,16 @@ const RoomButton: React.FC<Props> = ({
   useEffect(() => {
     const fun = async () => {
       try {
-        await service
+        const userId = user.uuid;
+        await baseService.createUserForRoom(userId, userId);
+        await doctorService
           .getRelatedRoom(user.person.uuid, patientId)
           .then((room) => {
             setRoom(room);
           });
-      } catch (error) {}
+      } catch (error) {
+        setError(true);
+      }
     };
     fun();
     return () => {};
@@ -45,19 +51,19 @@ const RoomButton: React.FC<Props> = ({
   return (
     <>
       {hasPrivileges ? (
-        room ? (
-          <JoinRoomButton callback={callback} room={room} />
-        ) : (
-          <CreateRoomButton
-            callback={(room: Room) => {
-              setRoom(room);
-            }}
-            patientId={patientId}
-            userId={user.person.uuid}
-          />
-        )
+        <p>...</p>
+      ) : error ? (
+        <p>Error</p>
+      ) : room ? (
+        <JoinRoomButton callback={callback} room={room} />
       ) : (
-        <></>
+        <CreateRoomButton
+          callback={(room: Room) => {
+            setRoom(room);
+          }}
+          patientId={patientId}
+          userId={user.person.uuid}
+        />
       )}
     </>
   );
