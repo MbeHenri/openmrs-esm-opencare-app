@@ -10,9 +10,8 @@
 
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { Payment } from "./payment/payment.component";
-import { Meeting } from "./metting/meeting.component";
-import { Home } from "./home/home.component";
+import { Payment } from "./pages/payment/payment.component";
+import { Meeting } from "./pages/metting/meeting.component";
 // import { useTranslation } from "react-i18next";
 //import styles from "./root.scss";
 

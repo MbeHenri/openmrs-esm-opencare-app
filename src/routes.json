@@ -26,6 +26,10 @@
       }
     },
     {
+      "component": "roombutton",
+      "name": "opencare-room-button"
+    },
+    {
       "component": "root",
       "name": "opencare-dashboard",
       "slot": "opencare-dashboard-slot"

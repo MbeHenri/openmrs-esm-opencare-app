@@ -9,6 +9,7 @@ import { configSchema } from "./config-schema";
 import { createLeftPanelLink } from "./left-panel-link.component";
 import Root from "./root.component";
 import { PaymentDashboardMeta, meetingDashboardMeta } from "./dashboard.meta";
+import RoomButtonExt from "./Extensions/RoomButtonExt";
 
 const moduleName = "@openmrs/esm-opencare-app";
 
@@ -59,5 +60,10 @@ export const meeting = getSyncLifecycle(
 
 export const payment = getSyncLifecycle(
   createLeftPanelLink(PaymentDashboardMeta),
+  options
+);
+
+export const roombutton = getSyncLifecycle(
+  RoomButtonExt,
   options
 );
