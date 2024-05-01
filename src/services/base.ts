@@ -41,9 +41,14 @@ class BaseService {
      * @param name displayName name for account
      * @returns 
      */
-    async createUserForRoom(user_id: string, name: string): Promise<void> {
-        const password = await this.room_rep.getPasswordUser(user_id);
-        return await this.room_rep.createUser(user_id, name, password);
+    async createUserForRoom(user_id: string, name: string): Promise<boolean> {
+        try {
+            const password = await this.room_rep.getPasswordUser(user_id);
+            await this.room_rep.createUser(user_id, name, password);
+            return true;
+        } catch (error) {
+            return false;
+        }
     }
 
 }

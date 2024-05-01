@@ -20,16 +20,9 @@ const JoinRoomButton: React.FC<Props> = ({
   const service = useMemo(() => DoctorService.getInstance(), []);
 
   const handleClick = useCallback(async () => {
-    try {
-      setLoading(true);
-
-      await service
-        .getRoomURL(room)
-        .then((url) => callback(url))
-        .then(() => setLoading(false));
-    } catch (error) {
-      console.log(error);
-    }
+    setLoading(true);
+    await service.getRoomURL(room).then((url) => callback(url));
+    setLoading(false);
   }, [callback, room, service]);
 
   return (

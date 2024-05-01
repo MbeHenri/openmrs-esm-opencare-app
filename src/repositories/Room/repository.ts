@@ -7,7 +7,7 @@ class RoomRepository {
     async createRoom(name: string = "ocare"): Promise<Room> {
 
         return {
-            token: "oqsbzs8w",
+            token: "sdfsdf",
             name: "id1#id2"
         };
     }
@@ -30,8 +30,7 @@ class RoomRepository {
     }
 
     async getPasswordUser(user_id: string): Promise<string> {
-
-        return TALK_PASSWORD;
+        return `${TALK_PASSWORD}`;
     }
 
     async getRoomParticipants(token_room: string): Promise<Array<User>> {

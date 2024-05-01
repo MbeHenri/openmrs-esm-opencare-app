@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from "react";
 import { useState } from "react";
-import DoctorService from "../../services/doctor";
 import { Button } from "@carbon/react";
+import DoctorService from "../../services/doctor";
 
 interface Props {
   patientId: string;
@@ -14,15 +14,9 @@ const CreateRoomButton: React.FC<Props> = ({ patientId, callback, userId }) => {
 
   const service = useMemo(() => DoctorService.getInstance(), []);
   const handleClick = useCallback(async () => {
-    try {
-      setLoading(true);
-      await service
-        .createRoom(userId, patientId)
-        .then((room) => callback(room))
-        .then(() => setLoading(false));
-    } catch (error) {
-      console.log(error);
-    }
+    setLoading(true);
+    await service.createRoom(userId, patientId).then((room) => callback(room));
+    setLoading(false);
   }, [callback, patientId, service, userId]);
 
   return (

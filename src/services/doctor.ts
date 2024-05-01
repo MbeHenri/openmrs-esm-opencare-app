@@ -32,8 +32,12 @@ class DoctorService {
      * @param patient_id patient id
      * @returns 
      */
-    async createRoom(doctor_id: string, patient_id: string): Promise<Room> {
-        return await this.room_rep.createRoom(`${doctor_id}#${patient_id}`);
+    async createRoom(doctor_id: string, patient_id: string): Promise<Room | null> {
+        try {
+            return await this.room_rep.createRoom(`${doctor_id}#${patient_id}`);
+        } catch (error) {
+            return null;
+        }
     }
 
 
@@ -53,11 +57,15 @@ class DoctorService {
      * @returns 
      */
     async getRelatedRoom(doctor_id: string, patient_id: string): Promise<Room | null> {
-        const rooms = await this.room_rep.getRelatedRooms(`${TALK_USER}`, `${TALK_PASSWORD}`);
-        const room = rooms.find((element) => {
-            return element.name === `${doctor_id}#${patient_id}`
-        })
-        return room ? room : null;
+        try {
+            const rooms = await this.room_rep.getRelatedRooms(`${TALK_USER}`, `${TALK_PASSWORD}`);
+            const room = rooms.find((element) => {
+                return element.name === `${doctor_id}#${patient_id}`
+            })
+            return room ? room : null;
+        } catch (error) {
+            return null
+        }
     }
 
 }

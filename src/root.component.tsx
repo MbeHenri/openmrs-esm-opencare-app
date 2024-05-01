@@ -12,6 +12,7 @@ import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Payment } from "./pages/payment/payment.component";
 import { Meeting } from "./pages/metting/meeting.component";
+import { DetailMeeting } from "./pages/metting/details.component";
 // import { useTranslation } from "react-i18next";
 //import styles from "./root.scss";
 
@@ -24,6 +25,7 @@ const Root: React.FC = () => {
     <BrowserRouter basename={basename}>
       <Routes>
         <Route path="/meeting" element={<Meeting />} />
+        <Route path="/meeting/:patientId" element={<DetailMeeting />} />
         <Route path="/payment" element={<Payment />} />
       </Routes>
     </BrowserRouter>

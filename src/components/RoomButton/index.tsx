@@ -1,13 +1,12 @@
 import React, { useEffect, useMemo } from "react";
 import { useState } from "react";
-import { usePatient, useSession, userHasAccess } from "@openmrs/esm-framework";
+import { useSession, userHasAccess } from "@openmrs/esm-framework";
 import Room from "../../models/Room";
 import { actions as doctorActions } from "../../privileges/doctor";
-import { TALK_BASE64, TALK_USER } from "../../repositories/env";
-import DoctorService from "../../services/doctor";
 import JoinRoomButton from "./JoinRoomButton";
 import CreateRoomButton from "./CreateRoomButton";
 import BaseService from "../../services/base";
+import DoctorService from "../../services/doctor";
 
 interface Props {
   patientId: string | null;
@@ -21,7 +20,6 @@ const RoomButton: React.FC<Props> = ({
   },
 }) => {
   const [room, setRoom] = useState<Room | null>(null);
-  const [error, setError] = useState(false);
   const doctorService = DoctorService.getInstance();
   const baseService = BaseService.getInstance();
 
@@ -32,16 +30,12 @@ const RoomButton: React.FC<Props> = ({
   // const {isLoading,patientUuid,error} = usePatient(patientId);
   useEffect(() => {
     const fun = async () => {
-      try {
-        const userId = user.uuid;
-        await baseService.createUserForRoom(userId, userId);
-        await doctorService
-          .getRelatedRoom(user.person.uuid, patientId)
-          .then((room) => {
-            setRoom(room);
-          });
-      } catch (error) {
-        setError(true);
+      const userId = user.uuid;
+      const res = await baseService.createUserForRoom(userId, userId);
+      if (res) {
+        await doctorService.getRelatedRoom(userId, patientId).then((room) => {
+          setRoom(room);
+        });
       }
     };
     fun();
@@ -52,13 +46,11 @@ const RoomButton: React.FC<Props> = ({
     <>
       {hasPrivileges ? (
         <p>...</p>
-      ) : error ? (
-        <p>Error</p>
       ) : room ? (
         <JoinRoomButton callback={callback} room={room} />
       ) : (
         <CreateRoomButton
-          callback={(room: Room) => {
+          callback={(room: Room | null) => {
             setRoom(room);
           }}
           patientId={patientId}

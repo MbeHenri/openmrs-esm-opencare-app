@@ -3,6 +3,7 @@ import Room from "../../models/Room";
 import { base64 } from "../../utils";
 import RoomRepository from "./repository";
 import User from "../../models/User";
+import { BadResponse } from "../errors";
 
 
 class ProdRoomRepository extends RoomRepository {
@@ -27,7 +28,21 @@ class ProdRoomRepository extends RoomRepository {
             body: raw,
         };
 
-        await fetch(`${NC_BASE_URL}/cloud/users`, requestOptions);
+        const response = await fetch(`${NC_BASE_URL}/cloud/users`, requestOptions);
+
+        if (response.status === 400 || response.ok) {
+            if (response.status === 400) {
+                const data = await response.json()
+                const status = data.ocs.statuscode as number
+
+                if (status !== 102) {
+                    throw new BadResponse()
+                }
+            }
+        } else {
+            throw new BadResponse()
+        }
+
     }
 
     async createRoom(name: string = "ocare"): Promise<Room> {
@@ -48,7 +63,12 @@ class ProdRoomRepository extends RoomRepository {
         };
 
         const room: Room = await fetch(`${TALK_BASE_URL}/room`, requestOptions)
-            .then(response => response.json())
+            .then(response => {
+                if (response.ok) {
+                    return response.json()
+                }
+                throw new BadResponse()
+            })
             .then(result => {
                 const data = result.ocs.data;
                 return { token: data.token, name: data.displayName }
@@ -72,7 +92,13 @@ class ProdRoomRepository extends RoomRepository {
             headers: myHeaders,
             body: formdata,
         };
-        await fetch(`${TALK_BASE_URL}/room/${token_room}/participants`, requestOptions);
+        await fetch(`${TALK_BASE_URL}/room/${token_room}/participants`, requestOptions)
+            .then(response => {
+                if (response.ok) {
+                    return response.json()
+                }
+                throw new BadResponse()
+            })
     }
 
 
@@ -91,8 +117,13 @@ class ProdRoomRepository extends RoomRepository {
 
         let rooms: Array<Room> = [];
 
-        await fetch(`http://localhost:8010/ocs/v2.php/apps/spreed/api/v4/room`, requestOptions)
-            .then(response => response.json())
+        await fetch(`${TALK_BASE_URL}/room`, requestOptions)
+            .then(response => {
+                if (response.ok) {
+                    return response.json()
+                }
+                throw new BadResponse()
+            })
             .then(result => {
                 const data: Array<any> = result.ocs.data;
                 data.forEach(element => {
@@ -143,7 +174,12 @@ class ProdRoomRepository extends RoomRepository {
             body: raw,
         };
 
-        await fetch(`${TALK_BASE_URL}/room/${token_room}/password`, requestOptions);
+        await fetch(`${TALK_BASE_URL}/room/${token_room}/password`, requestOptions).then(response => {
+            if (response.ok) {
+                return response.json()
+            }
+            throw new BadResponse()
+        });
     }
 
     async getRoomParticipants(token_room: string): Promise<Array<User>> {
@@ -160,7 +196,12 @@ class ProdRoomRepository extends RoomRepository {
         };
         const participants: Array<User> = [];
         await fetch(`${TALK_BASE_URL}/room/${token_room}/participants`, requestOptions)
-            .then(response => response.json())
+            .then(response => {
+                if (response.ok) {
+                    return response.json()
+                }
+                throw new BadResponse()
+            })
             .then(result => {
                 const data: Array<any> = result.ocs.data;
                 data.forEach(element => {
