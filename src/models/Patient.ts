@@ -1,11 +1,7 @@
 
 interface Patient {
-    id: string,
-    names: string,
-    gender: string,
-    age: number,
-    birthdate: Date,
-    birthdateEstimated: boolean,
-}
-
+    name: string,
+    uuid: string,
+    Identifier: string,
+  }
 export default Patient;

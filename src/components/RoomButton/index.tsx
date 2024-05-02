@@ -2,41 +2,32 @@ import React, { useEffect, useMemo } from "react";
 import { useState } from "react";
 import { useSession, userHasAccess } from "@openmrs/esm-framework";
 import Room from "../../models/Room";
-import { actions as doctorActions } from "../../privileges/doctor";
-import JoinRoomButton from "./JoinRoomButton";
+//import { actions as doctorActions } from "../../privileges/doctor";
 import CreateRoomButton from "./CreateRoomButton";
-import BaseService from "../../services/base";
 import DoctorService from "../../services/doctor";
+import { Link } from "react-router-dom";
 
 interface Props {
-  patientId: string | null;
-  callback?: Function;
+  patientId: string;
+  patientName: string;
 }
 
-const RoomButton: React.FC<Props> = ({
-  patientId = null,
-  callback = (url: string) => {
-    window.open(url);
-  },
-}) => {
+const RoomButton: React.FC<Props> = ({ patientId = "", patientName = "" }) => {
   const [room, setRoom] = useState<Room | null>(null);
   const doctorService = DoctorService.getInstance();
-  const baseService = BaseService.getInstance();
 
   // get a current User Id
   const user = useSession().user;
-  const hasPrivileges = userHasAccess(doctorActions, user);
+  // const hasPrivileges = userHasAccess(doctorActions, user);
+  const hasPrivileges = true;
 
   // const {isLoading,patientUuid,error} = usePatient(patientId);
   useEffect(() => {
     const fun = async () => {
       const userId = user.uuid;
-      const res = await baseService.createUserForRoom(userId, userId);
-      if (res) {
-        await doctorService.getRelatedRoom(userId, patientId).then((room) => {
-          setRoom(room);
-        });
-      }
+      await doctorService.getRelatedRoom(userId, patientId).then((room) => {
+        setRoom(room);
+      });
     };
     fun();
     return () => {};
@@ -45,17 +36,20 @@ const RoomButton: React.FC<Props> = ({
   return (
     <>
       {hasPrivileges ? (
-        <p>...</p>
-      ) : room ? (
-        <JoinRoomButton callback={callback} room={room} />
+        room ? (
+          <Link to={"/meeting/" + room.token}> Joindre</Link>
+        ) : (
+          <CreateRoomButton
+            callback={(room: Room | null) => {
+              setRoom(room);
+            }}
+            patientId={patientId}
+            patientName={patientName}
+            userId={user.uuid}
+          />
+        )
       ) : (
-        <CreateRoomButton
-          callback={(room: Room | null) => {
-            setRoom(room);
-          }}
-          patientId={patientId}
-          userId={user.person.uuid}
-        />
+        <p> out </p>
       )}
     </>
   );

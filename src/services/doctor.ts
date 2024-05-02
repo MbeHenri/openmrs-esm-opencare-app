@@ -10,7 +10,7 @@ class DoctorService {
     room_rep: RoomRepository;
 
     constructor() {
-        this.room_rep = getRoomRepository();
+        this.room_rep = getRoomRepository("good");
     }
 
     /**
@@ -32,14 +32,31 @@ class DoctorService {
      * @param patient_id patient id
      * @returns 
      */
-    async createRoom(doctor_id: string, patient_id: string): Promise<Room | null> {
+    async createRoom(doctor_id: string, patient_id: string, patient_name: string): Promise<Room | null> {
         try {
-            return await this.room_rep.createRoom(`${doctor_id}#${patient_id}`);
+            const room = await this.room_rep.createRoom(`${doctor_id}#${patient_id}`);
+            await this.room_rep.addRoomParticipant(doctor_id, room.token);
+            await this.addPatient(patient_id, patient_name, room);
+            return room;
         } catch (error) {
             return null;
         }
     }
 
+    /**
+     * add a patient on a room
+     * @param patient_id patient id
+     * @param patient_name patient name
+     * @param room room for the patient
+     */
+    async addPatient(patient_id: string, patient_name: string, room: Room): Promise<void> {
+        try {
+            const password = await this.room_rep.getPasswordUser(patient_id);
+            await this.room_rep.createUser(patient_id, patient_name, password);
+            await this.room_rep.addRoomParticipant(patient_id, room.token);
+
+        } catch (error) {}
+    }
 
     /**
     * get a room link

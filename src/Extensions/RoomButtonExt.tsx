@@ -5,7 +5,7 @@ import RoomButton from "../components/RoomButton";
 interface Props {}
 
 const RoomButtonExt: React.FC<Props> = ({}) => {
-  const { isLoading, patientUuid, error } = usePatient();
+  const { isLoading, patient, patientUuid, error } = usePatient();
   return (
     <>
       {isLoading ? (
@@ -13,7 +13,10 @@ const RoomButtonExt: React.FC<Props> = ({}) => {
       ) : error ? (
         <></>
       ) : (
-        <RoomButton patientId={patientUuid} />
+        <RoomButton
+          patientId={patientUuid}
+          patientName={patient.name[0].given[0] + " " + patient.name[0].family}
+        />
       )}
     </>
   );

@@ -25,7 +25,7 @@ const Root: React.FC = () => {
     <BrowserRouter basename={basename}>
       <Routes>
         <Route path="/meeting" element={<Meeting />} />
-        <Route path="/meeting/:patientId" element={<DetailMeeting />} />
+        <Route path="/meeting/:token" element={<DetailMeeting />} />
         <Route path="/payment" element={<Payment />} />
       </Routes>
     </BrowserRouter>

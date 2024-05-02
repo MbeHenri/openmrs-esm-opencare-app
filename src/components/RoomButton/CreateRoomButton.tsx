@@ -4,18 +4,26 @@ import { Button } from "@carbon/react";
 import DoctorService from "../../services/doctor";
 
 interface Props {
+  patientName: string;
   patientId: string;
   userId: string;
   callback: Function;
 }
 
-const CreateRoomButton: React.FC<Props> = ({ patientId, callback, userId }) => {
+const CreateRoomButton: React.FC<Props> = ({
+  patientId,
+  patientName,
+  callback,
+  userId,
+}) => {
   const [loading, setLoading] = useState(false);
 
   const service = useMemo(() => DoctorService.getInstance(), []);
   const handleClick = useCallback(async () => {
     setLoading(true);
-    await service.createRoom(userId, patientId).then((room) => callback(room));
+    await service
+      .createRoom(userId, patientId, patientName)
+      .then((room) => callback(room));
     setLoading(false);
   }, [callback, patientId, service, userId]);
 

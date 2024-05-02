@@ -1,33 +1,27 @@
 import React, { useEffect, useMemo, useState } from "react";
 import classnames from "classnames";
-import { usePatient, useSession } from "@openmrs/esm-framework";
+// import { usePatient, useSession } from "@openmrs/esm-framework";
 import { useParams } from "react-router-dom";
 import DoctorService from "../../services/doctor";
 
 export function DetailMeeting(): React.JSX.Element {
   const [url, setUrl] = useState<string | null>(null);
 
-  const { patientId } = useParams();
-  const { isLoading, patient, error } = usePatient(patientId);
+  const { token } = useParams();
+  //const { isLoading, patient, error } = usePatient(patientId);
 
   const service = useMemo(() => new DoctorService(), []);
-
-  // get a current User Id
-  const user = useSession().user;
-
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const func = async () => {
       setLoading(true);
-      const room = await service.getRelatedRoom(user.uuid, patientId);
-      if (room) {
-        await service.getRoomURL(room).then((url) => {
-          setUrl(url);
-        });
-      }
-      setLoading(false);
+      await service.getRoomURL({ name: "", token }).then((url) => {
+        setUrl(url);
+        setLoading(false);
+      });
     };
+
     func();
     return () => {};
   }, []);
@@ -36,7 +30,7 @@ export function DetailMeeting(): React.JSX.Element {
     <main className={classnames("omrs-main-content")}>
       {/* Espace de vue du patient */}
 
-      <div>
+      {/* <div>
         <h3> Patient </h3>
         {isLoading ? (
           <p>...</p>
@@ -45,7 +39,7 @@ export function DetailMeeting(): React.JSX.Element {
         ) : (
           <p>{patient.identifier[0].value}</p>
         )}
-      </div>
+      </div> */}
 
       {/* espace de la reunion */}
       <div>
