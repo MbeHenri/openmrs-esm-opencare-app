@@ -6,6 +6,7 @@ import Room from "../../models/Room";
 import CreateRoomButton from "./CreateRoomButton";
 import DoctorService from "../../services/doctor";
 import { Link } from "react-router-dom";
+import { Button } from "@carbon/react";
 
 interface Props {
   patientId: string;
@@ -19,15 +20,20 @@ const RoomButton: React.FC<Props> = ({ patientId = "", patientName = "" }) => {
   // get a current User Id
   const user = useSession().user;
   // const hasPrivileges = userHasAccess(doctorActions, user);
-  const hasPrivileges = true;
+  const hasPrivileges = useMemo(() => true, []);
 
   // const {isLoading,patientUuid,error} = usePatient(patientId);
+
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     const fun = async () => {
-      const userId = user.uuid;
-      await doctorService.getRelatedRoom(userId, patientId).then((room) => {
-        setRoom(room);
-      });
+      if (hasPrivileges) {
+        const userId = user.uuid;
+        await doctorService.getRelatedRoom(userId, patientId).then((room) => {
+          setRoom(room);
+          setLoading(false);
+        });
+      }
     };
     fun();
     return () => {};
@@ -36,8 +42,12 @@ const RoomButton: React.FC<Props> = ({ patientId = "", patientName = "" }) => {
   return (
     <>
       {hasPrivileges ? (
-        room ? (
-          <Link to={"/meeting/" + room.token}> Joindre</Link>
+        loading ? (
+          <Button>Loading...</Button>
+        ) : room ? (
+          <Link to={"/meeting/" + room.token}>
+            <Button>Joindre</Button>
+          </Link>
         ) : (
           <CreateRoomButton
             callback={(room: Room | null) => {
