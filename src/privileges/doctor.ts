@@ -1,74 +1,213 @@
 
 export const actions = [
-    "Add Allergies"
-    , "Add Cohorts"
-    , "Add Concept Proposals"
-    , "Add Encounters"
-    , "Add HL7 Inbound Archive"
-    , "Add HL7 Inbound Exception"
-    , "Add HL7 Inbound Queue"
-    , "Add HL7 Source"
-    , "Add Observations"
-    , "Add Orders"
-    , "Add Patient Identifiers"
-    , "Add Patient Programs"
-    , "Add Patients"
-    , "Add People"
-    , "Add Problems"
-    , "Add Relationships"
-    , "Add Users"
-    , "Add Visits"
-    , "Assign System Developer Role"
-    , "Configure Visits"
-    , "Delete Cohorts"
-    , "Delete Concept Proposals"
-    , "Delete Conditions"
-    , "Delete Diagnoses"
-    , "Delete Encounters"
-    , "Delete HL7 Inbound Archive"
-    , "Delete HL7 Inbound Exception"
-    , "Delete HL7 Inbound Queue"
-    , "Delete Medication Dispense"
-    , "Delete Notes"
-    , "Delete Observations"
-    , "Delete Orders"
-    , "Delete Patient Identifiers"
-    , "Delete Patient Programs"
-    , "Delete Patients"
-    , "Delete People"
-    , "Delete Reports"
-    , "Delete Users"
-    , "Delete Visits"
-    , "Edit Allergies"
-    , "Edit Cohorts"
-    , "Edit Concept Proposals"
-    , "Edit Conditions"
-    , "Edit Diagnoses"
-    , "Edit Encounters"
-    , "Edit Notes"
-    , "Edit Observations"
-    , "Edit Orders"
-    , "Edit Patient Identifiers"
-    , "Edit Patient Programs"
-    , "Edit Patients"
-    , "Edit People"
-    , "Edit Problems"
-    , "Edit Relationships"
-    , "Edit User Passwords"
-    , "Edit Users"
-    , "Edit Visits"
-    , "Form Entry"
-    , "Generate Batch of Identifiers"
-    , "Get Allergies"
-    , "Get Care Settings"
-    , "Get Concept Attribute Types"
-    , "Get Concept Classes"
-    , "Get Concept Datatypes"
-    , "Get Concept Map Types"
-    , "Get Concept Proposals"
-    , "Get Concept Reference Terms"
-    , "Get Concept Sources"
-    , "Get Concepts"
-    , "Get Conditions"
-    ,
+    "Edit Patient Identifiers",
+    "Remove Problems",
+    "View Order Types",
+    "View Global Properties",
+    "Edit Problems",
+    "View Concept Proposals",
+    "Add Relationships",
+    "View Locations",
+    "Manage OWA",
+    "Preview Forms",
+    "Manage HL7 Messages",
+    "View Patient Programs",
+    "Manage Concept Reference Terms",
+    "Manage Order Set Attribute Types",
+    "Delete HL7 Inbound Archive",
+    "Manage Concept Map Types",
+    "Add Encounters",
+    "View Patients",
+    "Generate Batch of Identifiers",
+    "Manage Person Attribute Types",
+    "Manage Auto Generation Options",
+    "Edit Encounters",
+    "Manage Field Types",
+    "Add Orders",
+    "View Programs",
+    "Manage Visit Attribute Types",
+    "Manage Forms",
+    "View Concept Datatypes",
+    "Add Concept Proposals",
+    "Manage Identifier Types",
+    "Update HL7 Inbound Exception",
+    "Get Order Frequencies",
+    "Manage Implementation Id",
+    "Manage Relationships",
+    "Manage Programs",
+    "Upload Batch of Identifiers",
+    "Remove Allergies",
+    "Manage Order Sets",
+    "Add Problems",
+    "View Observations",
+    "Add Visits",
+    "View Forms",
+    "Add Patients",
+    "View Problems",
+    "Add People",
+    "Add HL7 Source",
+    "Get Concept Attribute Types",
+    "Add Observations",
+    "Manage Visit Types",
+    "View Roles",
+    "Add Patient Programs",
+    "Edit Visits",
+    "Delete Patient Programs",
+    "View Encounters",
+    "View Privileges",
+    "Manage Providers",
+    "View Field Types",
+    "Delete People",
+    "Delete Users",
+    "Manage Encounter Roles",
+    "Delete Patients",
+    "Patient Dashboard - View Forms Section",
+    "View People",
+    "Get Diagnoses Attribute Types",
+    "Manage Address Hierarchy",
+    "Add Patient Identifiers",
+    "Edit Cohorts",
+    "Get Notes",
+    "Delete HL7 Inbound Exception",
+    "Get Visit Types",
+    "Get HL7 Inbound Exception",
+    "Manage Concepts",
+    "Get Visit Attribute Types",
+    "Get Visits",
+    "Get Providers",
+    "Get Location Attribute Types",
+    "Get Encounter Roles",
+    "Add HL7 Inbound Archive",
+    "Get HL7 Source",
+    "View Orders",
+    "Get HL7 Inbound Archive",
+    "Get HL7 Inbound Queue",
+    "Delete Patient Identifiers",
+    "View Relationship Types",
+    "Manage Global Properties",
+    "Manage Modules",
+    "Update HL7 Source",
+    "View Patient Cohorts",
+    "Manage Metadata Mapping",
+    "Edit Conditions",
+    "Delete Cohorts",
+    "Assign System Developer Role",
+    "Edit Users",
+    "Delete Concept Proposals",
+    "Get Concept Datatypes",
+    "Get Concept Classes",
+    "Edit Notes",
+    "Get Roles",
+    "Get Care Settings",
+    "Get Privileges",
+    "Get Order Types",
+    "Get Field Types",
+    "Get Concept Sources",
+    "Get Relationship Types",
+    "Manage Encounter Types",
+    "Get Identifier Types",
+    "Manage Scheduler",
+    "Get Forms",
+    "Get Orders",
+    "Get Global Properties",
+    "Manage Locations",
+    "Get Patient Programs",
+    "Get People",
+    "Patient Dashboard - View Overview Section",
+    "Delete Diagnoses",
+    "Get Person Attribute Types",
+    "Get Database Changes",
+    "Form Entry",
+    "Get Relationships",
+    "Get Allergies",
+    "Get Problems",
+    "Edit Diagnoses",
+    "Delete Orders",
+    "Get Programs",
+    "Get Concept Reference Terms",
+    "Purge Field Types",
+    "View Data Entry Statistics",
+    "Manage Address Templates",
+    "Upload XSN",
+    "Get Concept Map Types",
+    "Add HL7 Inbound Exception",
+    "Manage Identifier Sources",
+    "Get Conditions",
+    "Update HL7 Inbound Archive",
+    "Add Allergies",
+    "Manage Search Index",
+    "Manage Concept Classes",
+    "View Patient Identifiers",
+    "Manage Order Frequencies",
+    "Patient Overview - View Relationships",
+    "Patient Dashboard - View Demographics Section",
+    "Patient Overview - View Programs",
+    "Patient Overview - View Problem List",
+    "Patient Overview - View Allergies",
+    "View Administration Functions",
+    "Get Encounters",
+    "Get Users",
+    "Get Locations",
+    "View Encounter Types",
+    "Get Encounter Types",
+    "Get Patients",
+    "Get Observations",
+    "Get Patient Cohorts",
+    "Manage Location Attribute Types",
+    "View Identifier Types",
+    "Get Patient Identifiers",
+    "View Metadata Via Mapping",
+    "Add Users",
+    "Edit User Passwords",
+    "View Navigation Menu",
+    "Get Concepts",
+    "Delete Encounters",
+    "Get Concept Proposals",
+    "Edit People",
+    "Manage RESTWS",
+    "Edit Concept Proposals",
+    "Manage Concept Stop Words",
+    "Manage Location Tags",
+    "Manage Concept Sources",
+    "Manage Order Types",
+    "Edit Allergies",
+    "Patient Dashboard - View Encounters Section",
+    "Add Cohorts",
+    "Delete Notes",
+    "Manage Concept Datatypes",
+    "Delete Conditions",
+    "Manage Relationship Types",
+    "Edit Orders",
+    "Get Order Set Attribute Types",
+    "Get Diagnoses",
+    "View Relationships",
+    "Manage Alerts",
+    "Manage FormEntry XSN",
+    "View Unpublished Forms",
+    "Configure Visits",
+    "Patient Overview - View Patient Actions",
+    "Get Order Sets",
+    "Delete Visits",
+    "Patient Dashboard - View Patient Summary",
+    "Delete HL7 Inbound Queue",
+    "Delete Relationships",
+    "Edit Observations",
+    "View Concepts",
+    "Edit Patient Programs",
+    "View Person Attribute Types",
+    "View RESTWS",
+    "Patient Dashboard - View Graphs Section",
+    "Delete Observations",
+    "Patient Dashboard - View Regimen Section",
+    "Manage Concept Attribute Types",
+    "Manage Concept Name tags",
+    "View Users",
+    "View Allergies",
+    "View Concept Sources",
+    "Add HL7 Inbound Queue",
+    "Manage Roles",
+    "Update HL7 Inbound Queue",
+    "Edit Relationships",
+    "Edit Patients",
+    "View Concept Classes"
 ]

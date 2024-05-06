@@ -19,21 +19,17 @@ const RoomButton: React.FC<Props> = ({ patientId = "", patientName = "" }) => {
 
   // get a current User Id
   const user = useSession().user;
-  // const hasPrivileges = userHasAccess(doctorActions, user);
-  const hasPrivileges = useMemo(() => true, []);
 
   // const {isLoading,patientUuid,error} = usePatient(patientId);
-
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     const fun = async () => {
-      if (hasPrivileges) {
-        const userId = user.uuid;
-        await doctorService.getRelatedRoom(userId, patientId).then((room) => {
-          setRoom(room);
-          setLoading(false);
-        });
-      }
+      setLoading(true);
+      const userId = user.uuid;
+      await doctorService.getRelatedRoom(userId, patientId).then((room) => {
+        setRoom(room);
+        setLoading(false);
+      });
     };
     fun();
     return () => {};
@@ -41,25 +37,21 @@ const RoomButton: React.FC<Props> = ({ patientId = "", patientName = "" }) => {
 
   return (
     <>
-      {hasPrivileges ? (
-        loading ? (
-          <Button>Loading...</Button>
-        ) : room ? (
-          <Link to={"/meeting/" + room.token}>
-            <Button>Joindre</Button>
-          </Link>
-        ) : (
-          <CreateRoomButton
-            callback={(room: Room | null) => {
-              setRoom(room);
-            }}
-            patientId={patientId}
-            patientName={patientName}
-            userId={user.uuid}
-          />
-        )
+      {loading ? (
+        <Button>Loading...</Button>
+      ) : room ? (
+        <Link to={"/meeting/" + room.token}>
+          <Button>Joindre</Button>
+        </Link>
       ) : (
-        <p> out </p>
+        <CreateRoomButton
+          callback={(room: Room | null) => {
+            setRoom(room);
+          }}
+          patientId={patientId}
+          patientName={patientName}
+          userId={user.uuid}
+        />
       )}
     </>
   );

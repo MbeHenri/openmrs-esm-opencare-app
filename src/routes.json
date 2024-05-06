@@ -27,7 +27,8 @@
     },
     {
       "component": "roombutton",
-      "name": "opencare-room-button"
+      "name": "opencare-room-button",
+      "slot": "visit-header-right-slot"
     },
     {
       "component": "root",

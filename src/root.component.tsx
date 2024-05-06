@@ -13,6 +13,9 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Payment } from "./pages/payment/payment.component";
 import { Meeting } from "./pages/metting/meeting.component";
 import { DetailMeeting } from "./pages/metting/details.component";
+import RestrictComponent from "./components/RestrictComponent";
+import { Home } from "./pages/home/home.component";
+import { Unauthorized } from "./pages/unauthorized";
 // import { useTranslation } from "react-i18next";
 //import styles from "./root.scss";
 
@@ -24,9 +27,47 @@ const Root: React.FC = () => {
   return (
     <BrowserRouter basename={basename}>
       <Routes>
-        <Route path="/meeting" element={<Meeting />} />
-        <Route path="/meeting/:token" element={<DetailMeeting />} />
-        <Route path="/payment" element={<Payment />} />
+        {/* Route de la page d'acceuil */}
+        <Route
+          path="/home"
+          element={
+            <RestrictComponent redirect>
+              <Home />
+            </RestrictComponent>
+          }
+        />
+
+        {/* Route des meetings */}
+        <Route
+          path="/meeting"
+          element={
+            <RestrictComponent redirect>
+              <Meeting />
+            </RestrictComponent>
+          }
+        />
+
+        {/* Route d'une conversation précise */}
+        <Route
+          path="/meeting/:token"
+          element={
+            <RestrictComponent redirect>
+              <DetailMeeting />
+            </RestrictComponent>
+          }
+        />
+
+        {/* Route de l'espace facturation */}
+        <Route
+          path="/payment"
+          element={
+            <RestrictComponent redirect>
+              <Payment />
+            </RestrictComponent>
+          }
+        />
+        {/* Route de la vue non authorizé */}
+        <Route path="/unauthorized" element={<Unauthorized />} />
       </Routes>
     </BrowserRouter>
   );
