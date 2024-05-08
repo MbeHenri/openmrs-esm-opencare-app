@@ -20,6 +20,38 @@ import { Type, validator } from "@openmrs/esm-framework";
  * and the Schema Reference
  *   https://openmrs.github.io/openmrs-esm-core/#/main/config?id=schema-reference
  */
-export const configSchema = {};
- 
-export type Config = {};
+export const configSchema = {
+    TALK_USER: {
+        _type: Type.String,
+        _default: "admin",
+        _description: 'Talk user used',
+    },
+    TALK_PASSWORD: {
+        _type: Type.String,
+        _default: "Admin123",
+        _description: 'Talk password used',
+    },
+    TALK_PORT: {
+        _type: Type.String,
+        _default: "8010",
+        _description: 'Talk port',
+    },
+    TALK_HOST: {
+        _type: Type.String,
+        _default: "127.0.0.1",
+        _description: 'Talk host used',
+    },
+    TALK_INIT_PASSWORD: {
+        _type: Type.String,
+        _default: "TALK_PASSWORD",
+        _description: 'Talk password used',
+    },
+};
+
+export type Config = {
+    TALK_USER: string,
+    TALK_PASSWORD: string,
+    TALK_PORT: string,
+    TALK_HOST: string,
+    TALK_INIT_PASSWORD: string,
+};

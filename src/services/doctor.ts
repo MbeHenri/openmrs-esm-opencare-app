@@ -1,7 +1,7 @@
 import Room from "../models/Room";
 import { getRoomRepository } from "../repositories/Room";
 import RoomRepository from "../repositories/Room/repository";
-import { TALK_PASSWORD, TALK_USER } from "../repositories/env";
+import env from "../repositories/env";
 import BaseService from "./base";
 
 class DoctorService {
@@ -55,7 +55,7 @@ class DoctorService {
             await this.room_rep.createUser(patient_id, patient_name, password);
             await this.room_rep.addRoomParticipant(patient_id, room.token);
 
-        } catch (error) {}
+        } catch (error) { }
     }
 
     /**
@@ -75,6 +75,8 @@ class DoctorService {
      */
     async getRelatedRoom(doctor_id: string, patient_id: string): Promise<Room | null> {
         try {
+            const TALK_USER = env.TALK_USER
+            const TALK_PASSWORD = env.TALK_PASSWORD
             const rooms = await this.room_rep.getRelatedRooms(`${TALK_USER}`, `${TALK_PASSWORD}`);
             const room = rooms.find((element) => {
                 return element.name === `${doctor_id}#${patient_id}`

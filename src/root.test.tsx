@@ -37,7 +37,13 @@ import Root from "./root.component";
 const mockUseConfig = useConfig as jest.Mock;
 
 it("renders a landing page for the opencare app", () => {
-  const config: Config = { };
+  const config: Config = {
+    TALK_HOST: "localhost",
+    TALK_INIT_PASSWORD: "TALK_PASSWORD",
+    TALK_PASSWORD: "Admin123",
+    TALK_PORT: "8010",
+    TALK_USER: "admin",
+  };
   mockUseConfig.mockReturnValue(config);
 
   render(<Root />);

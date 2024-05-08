@@ -1,7 +1,7 @@
 import Room from "../models/Room";
 import { getRoomRepository } from "../repositories/Room";
 import RoomRepository from "../repositories/Room/repository";
-import { TALK_HOST, TALK_PORT } from "../repositories/env";
+import env from "../repositories/env";
 
 class BaseService {
     static instance: BaseService | null = null;
@@ -25,16 +25,19 @@ class BaseService {
         }
 
     }
-    
+
     /**
     * get a room link
     * @param room room
     * @returns 
     */
     static async getRoomURL(room: Room): Promise<string> {
+        const TALK_HOST = env.TALK_HOST
+        const TALK_PORT = env.TALK_PORT
+
         return `http://${TALK_HOST}:${TALK_PORT}/call/${room.token}`;
     }
-   
+
     /**
      * 
      * @param user_id O3 Identifier of a user

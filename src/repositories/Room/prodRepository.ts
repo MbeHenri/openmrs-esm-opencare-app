@@ -1,14 +1,17 @@
-import { NC_BASE_URL, TALK_BASE64, TALK_BASE_URL } from "../env";
 import Room from "../../models/Room";
 import { base64 } from "../../utils";
 import RoomRepository from "./repository";
 import User from "../../models/User";
 import { BadResponse } from "../errors";
+import env from "../env";
 
 
 class ProdRoomRepository extends RoomRepository {
 
     async createUser(user_id: string, name: string, password: string): Promise<void> {
+
+        const TALK_BASE64 = env.TALK_BASE64()
+        const NC_BASE_URL = env.NC_BASE_URL()
 
         var myHeaders = new Headers();
         myHeaders.append("Accept", "application/json,");
@@ -47,6 +50,9 @@ class ProdRoomRepository extends RoomRepository {
 
     async createRoom(name: string = "ocare"): Promise<Room> {
 
+        const TALK_BASE64 = env.TALK_BASE64()
+        const TALK_BASE_URL = env.TALK_BASE_URL()
+
         var myHeaders = new Headers();
         myHeaders.append("OCS-APIRequest", "true");
         myHeaders.append("Accept", "application/json");
@@ -78,7 +84,10 @@ class ProdRoomRepository extends RoomRepository {
     }
 
     async addUserInRoom(token_room: string, user_id: string): Promise<void> {
-
+        
+        const TALK_BASE64 = env.TALK_BASE64()
+        const TALK_BASE_URL = env.TALK_BASE_URL()
+        
         var myHeaders = new Headers();
         myHeaders.append("OCS-APIRequest", "true");
         myHeaders.append("Accept", "application/json");
@@ -103,6 +112,8 @@ class ProdRoomRepository extends RoomRepository {
 
 
     async getRelatedRooms(user_id: string, password: string): Promise<Array<Room>> {
+    
+        const TALK_BASE_URL = env.TALK_BASE_URL()
         var myHeaders = new Headers();
         myHeaders.append("OCS-APIRequest", "true");
         myHeaders.append("Accept", "application/json");
@@ -137,7 +148,10 @@ class ProdRoomRepository extends RoomRepository {
     }
 
     async setRoomLinkable(token_room: string): Promise<void> {
-
+        
+        const TALK_BASE64 = env.TALK_BASE64()
+        const TALK_BASE_URL = env.TALK_BASE_URL()
+        
         var myHeaders = new Headers();
         myHeaders.append("OCS-APIRequest", "true");
         myHeaders.append("Accept", "application/json");
@@ -154,7 +168,10 @@ class ProdRoomRepository extends RoomRepository {
 
 
     async setPasswordLinkedRoom(token_room: string, password: string): Promise<void> {
-
+        
+        const TALK_BASE64 = env.TALK_BASE64()
+        const TALK_BASE_URL = env.TALK_BASE_URL()
+        
         var myHeaders = new Headers();
         myHeaders.append("OCS-APIRequest", "true");
         myHeaders.append("Accept", "application/json");
@@ -180,7 +197,10 @@ class ProdRoomRepository extends RoomRepository {
     }
 
     async getRoomParticipants(token_room: string): Promise<Array<User>> {
-
+        
+        const TALK_BASE64 = env.TALK_BASE64()
+        const TALK_BASE_URL = env.TALK_BASE_URL()
+        
         var myHeaders = new Headers();
         myHeaders.append("OCS-APIRequest", "true");
         myHeaders.append("Accept", "application/json");
@@ -213,7 +233,10 @@ class ProdRoomRepository extends RoomRepository {
     }
 
     async addRoomParticipant(user_id: string, token_room: string): Promise<void> {
-
+        
+        const TALK_BASE64 = env.TALK_BASE64()
+        const TALK_BASE_URL = env.TALK_BASE_URL()
+        
         const myHeaders = new Headers();
         myHeaders.append("OCS-APIRequest", "true");
         myHeaders.append("Accept", "application/json");

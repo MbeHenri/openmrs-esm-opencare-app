@@ -1,12 +1,24 @@
 import { base64 } from "../utils";
 
-// Talk env variables
-export const TALK_USER = "admin";
-export const TALK_PASSWORD = "Admin123";
-export const TALK_PORT = "8010";
-export const TALK_HOST = "localhost";
+class env {
+    
+    // Talk env variables
+    static TALK_USER: string = ""
+    static TALK_PASSWORD: string = ""
+    static TALK_PORT: string = ""
+    static TALK_HOST: string = ""
 
-export const TALK_BASE64 = base64(`${TALK_USER}:${TALK_PASSWORD}`);
+    static TALK_BASE64(): string {
+        return base64(`${env.TALK_USER}:${env.TALK_PASSWORD}`)
+    }
 
-export const NC_BASE_URL = `http://${TALK_HOST}:${TALK_PORT}/ocs/v2.php`
-export const TALK_BASE_URL = `${NC_BASE_URL}/apps/spreed/api/v4`;
+    static NC_BASE_URL(): string {
+        return `http://${env.TALK_HOST}:${env.TALK_PORT}/ocs/v2.php`
+    }
+
+    static TALK_BASE_URL(): string {
+        return `${env.NC_BASE_URL()}/apps/spreed/api/v4`
+    }
+}
+
+export default env

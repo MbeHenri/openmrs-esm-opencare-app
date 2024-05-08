@@ -8,7 +8,7 @@
  *   https://openmrs.github.io/openmrs-esm-core/#/main/config
  */
 
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Payment } from "./pages/payment/payment.component";
 import { Meeting } from "./pages/metting/meeting.component";
@@ -16,6 +16,8 @@ import { DetailMeeting } from "./pages/metting/details.component";
 import RestrictComponent from "./components/RestrictComponent";
 import { Home } from "./pages/home/home.component";
 import { Unauthorized } from "./pages/unauthorized";
+import { useConfig } from "@openmrs/esm-framework";
+import env from "./repositories/env";
 // import { useTranslation } from "react-i18next";
 //import styles from "./root.scss";
 
@@ -23,6 +25,18 @@ const Root: React.FC = () => {
   // const { t } = useTranslation();
   //const basename = window.getOpenmrsSpaBase() + "home/opencare";
   const basename = window.getOpenmrsSpaBase() + "opencare";
+
+  //recupération de la configuration
+  const conf = useConfig();
+
+  // update env variable
+  useEffect(() => {
+    env.TALK_HOST = conf["TALK_HOST"];
+    env.TALK_PASSWORD = conf["TALK_PASSWORD"];
+    env.TALK_PORT = conf["TALK_PORT"];
+    env.TALK_USER = conf["TALK_USER"];
+    return () => {};
+  }, []);
 
   return (
     <BrowserRouter basename={basename}>
