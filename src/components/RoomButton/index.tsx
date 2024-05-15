@@ -50,7 +50,7 @@ const RoomButton: React.FC<Props> = ({ patientId = "", patientName = "" }) => {
           }}
           patientId={patientId}
           patientName={patientName}
-          userId={user.uuid}
+          userId={user.person.uuid}
         />
       )}
     </>
