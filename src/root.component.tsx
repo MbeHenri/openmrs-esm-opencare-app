@@ -31,6 +31,10 @@ const Root: React.FC = () => {
 
   // update env variable
   useEffect(() => {
+    env.API_HOST = conf["API_HOST"];
+    env.API_PASSWORD = conf["API_PASSWORD"];
+    env.API_PORT = conf["API_PORT"];
+    env.API_USER = conf["API_USER"];
     env.TALK_HOST = conf["TALK_HOST"];
     env.TALK_PASSWORD = conf["TALK_PASSWORD"];
     env.TALK_PORT = conf["TALK_PORT"];

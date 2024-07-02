@@ -26,9 +26,14 @@
       }
     },
     {
-      "component": "roombutton",
-      "name": "opencare-room-button",
-      "slot": "visit-header-right-slot"
+      "component": "demandtab",
+      "name": "opencare-demand-tab",
+      "slot": "homepage-widgets-slot"
+    },
+    {
+      "component": "appointmenttab",
+      "name": "opencare-appointment-tab",
+      "slot": "patient-chart-appointments-dashboard-slot"
     },
     {
       "component": "root",

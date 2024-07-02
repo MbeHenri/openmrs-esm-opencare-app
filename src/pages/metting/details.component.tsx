@@ -10,13 +10,13 @@ export function DetailMeeting(): React.JSX.Element {
   const { token } = useParams();
   //const { isLoading, patient, error } = usePatient(patientId);
 
-  const service = useMemo(() => new DoctorService(), []);
+  const doctorService = DoctorService.getInstance();
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const func = async () => {
       setLoading(true);
-      await service.getRoomURL({ name: "", token }).then((url) => {
+      await doctorService.getRoomURL({ name: "", token }).then((url) => {
         setUrl(url);
         setLoading(false);
       });

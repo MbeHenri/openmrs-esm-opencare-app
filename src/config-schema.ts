@@ -46,6 +46,26 @@ export const configSchema = {
         _default: "TALK_PASSWORD",
         _description: 'Talk password used',
     },
+    API_USER: {
+        _type: Type.String,
+        _default: "admin",
+        _description: 'API user used',
+    },
+    API_PASSWORD: {
+        _type: Type.String,
+        _default: "Admin123",
+        _description: 'API password used',
+    },
+    API_PORT: {
+        _type: Type.String,
+        _default: "3002",
+        _description: 'API port',
+    },
+    API_HOST: {
+        _type: Type.String,
+        _default: "127.0.0.1",
+        _description: 'API host used',
+    },
 };
 
 export type Config = {
@@ -54,4 +74,8 @@ export type Config = {
     TALK_PORT: string,
     TALK_HOST: string,
     TALK_INIT_PASSWORD: string,
+    API_USER: string,
+    API_PASSWORD: string,
+    API_PORT: string,
+    API_HOST: string,
 };

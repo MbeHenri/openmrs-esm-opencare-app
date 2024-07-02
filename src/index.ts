@@ -10,6 +10,8 @@ import { createLeftPanelLink } from "./left-panel-link.component";
 import Root from "./root.component";
 import { PaymentDashboardMeta, meetingDashboardMeta } from "./dashboard.meta";
 import RoomButtonExt from "./Extensions/RoomButtonExt";
+import DemandTabExt from "./Extensions/DemandTab";
+import AppointmentTabExt from "./Extensions/AppointmentTabExt";
 
 const moduleName = "@openmrs/esm-opencare-app";
 
@@ -63,7 +65,17 @@ export const payment = getSyncLifecycle(
   options
 );
 
-export const roombutton = getSyncLifecycle(
+/* export const roombutton = getSyncLifecycle(
   RoomButtonExt,
+  options
+); */
+
+export const demandtab = getSyncLifecycle(
+  DemandTabExt,
+  options
+);
+
+export const appointmenttab = getSyncLifecycle(
+  AppointmentTabExt,
   options
 );
