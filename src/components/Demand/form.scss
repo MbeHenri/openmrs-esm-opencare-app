@@ -1,0 +1,19 @@
+.formGroupsContainer {
+  margin: 1rem
+}
+
+.formGroupContainer {
+  margin-top: 0.5rem;
+}
+
+.buttonContainer {
+  display: flex;
+  width: 100%;
+  background-color: #0d8888;
+}
+
+.formButton {
+  max-width: unset !important;
+  flex: 1;
+  height: 4rem;
+}

@@ -4,14 +4,15 @@
  * connects the app shell to the React application(s) that make up this
  * microfrontend.
  */
-import { getAsyncLifecycle, defineConfigSchema, getSyncLifecycle } from "@openmrs/esm-framework";
+import { defineConfigSchema, getSyncLifecycle } from "@openmrs/esm-framework";
 import { configSchema } from "./config-schema";
 import { createLeftPanelLink } from "./left-panel-link.component";
 import Root from "./root.component";
 import { PaymentDashboardMeta, meetingDashboardMeta } from "./dashboard.meta";
-import RoomButtonExt from "./Extensions/RoomButtonExt";
 import DemandTabExt from "./Extensions/DemandTab";
 import AppointmentTabExt from "./Extensions/AppointmentTabExt";
+import MeetIframeExt from "./Extensions/MeetIframeExt";
+import { ValidateDemandFormExt } from "./Extensions/ValidateDemandFormExt";
 
 const moduleName = "@openmrs/esm-opencare-app";
 
@@ -77,5 +78,15 @@ export const demandtab = getSyncLifecycle(
 
 export const appointmenttab = getSyncLifecycle(
   AppointmentTabExt,
+  options
+);
+
+export const meetiframe = getSyncLifecycle(
+  MeetIframeExt,
+  options
+);
+
+export const validatedemandform = getSyncLifecycle(
+  ValidateDemandFormExt,
   options
 );

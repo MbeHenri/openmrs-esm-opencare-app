@@ -135,6 +135,15 @@ class DoctorService {
         }
     }
 
+    async getProviders(): Promise<Array<any>> {
+        try {
+            return await this.opencare_rep.getProviders();
+        } catch (error) {
+            console.log((error));
+            return null;
+        }
+    }
+
 
     /**
      * create a room for the digital consultation for a patient

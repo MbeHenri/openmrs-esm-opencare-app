@@ -39,6 +39,20 @@
       "component": "root",
       "name": "opencare-dashboard",
       "slot": "opencare-dashboard-slot"
+    },
+    {
+      "component": "meetiframe",
+      "name": "opencare-meet-iframe",
+      "meta": {
+        "title": {
+          "key": "meetWorkspace",
+          "default": "Meet Workspace"
+        }
+      }
+    },
+    {
+      "component": "validatedemandform",
+      "name": "opencare-validate-demand-form"
     }
   ],
   "pages": [

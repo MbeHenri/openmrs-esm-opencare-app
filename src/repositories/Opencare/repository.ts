@@ -19,6 +19,10 @@ class OpencareRepository {
 
     }
 
+    async getProviders(): Promise<Array<any>> {
+        return []
+    }
+
 }
 
 export default OpencareRepository;

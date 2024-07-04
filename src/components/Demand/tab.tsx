@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo } from "react";
+import React, { useCallback, useEffect } from "react";
 import { useState } from "react";
 import {
   Button,
@@ -16,9 +16,10 @@ import {
 } from "@carbon/react";
 
 import {
-  formatDatetime,
+  ToastType,
   isDesktop,
-  parseDate,
+  showModal,
+  showToast,
   useConfig,
   useLayoutType,
 } from "@openmrs/esm-framework";
@@ -83,11 +84,13 @@ const DemandTab: React.FC = ({}) => {
       setProcessing(true);
       const res = await doctorService.rejectDemand(demand.id);
       let message = "";
+      let type: ToastType = "error";
       if (res) {
         message = `the demand initiated by ${demand.patient} have been rejected`;
         await doctorService.getDemands().then((demands) => {
           if (demands) {
             setDemands(demands);
+            type = "success";
           } else {
             setError(true);
           }
@@ -96,38 +99,32 @@ const DemandTab: React.FC = ({}) => {
         message = `Erreur de rejet`;
       }
       setProcessing(false);
-      alert(message);
+      showToast({ description: message, kind: type });
     }
   }, []);
 
   const handleValidate = useCallback(async (demand) => {
     if (!processing) {
       setProcessing(true);
-
-      const doctor_id = "qsdqsdqsdqsdqsd";
-      const duration = 30;
-      const startDate = new Date();
-      const res = await doctorService.validateDemand(
-        demand.id,
-        doctor_id,
-        startDate,
-        duration
+      const dispose = showModal(
+        "opencare-validate-demand-form",
+        {
+          demand,
+          onClose: () => {
+            dispose();
+          },
+        },
+        async () => {
+          await doctorService.getDemands().then((demands) => {
+            if (demands) {
+              setDemands(demands);
+            } else {
+              setError(true);
+            }
+          });
+          setProcessing(false);
+        }
       );
-      let message = "";
-      if (res) {
-        message = `the demand initiated by ${demand.patient} have been validated`;
-        await doctorService.getDemands().then((demands) => {
-          if (demands) {
-            setDemands(demands);
-          } else {
-            setError(true);
-          }
-        });
-      } else {
-        message = `Erreur de rejet`;
-      }
-      setProcessing(false);
-      alert(message);
     }
   }, []);
 

@@ -113,6 +113,35 @@ class ProdOpencareRepository extends OpencareRepository {
             })
     }
 
+    async getProviders(): Promise<Array<any>> {
+
+        var myHeaders = new Headers();
+        myHeaders.append("Accept", "application/json,");
+        myHeaders.append("Content-Type", "application/json");
+        //myHeaders.append("Authorization", `Basic ${TALK_BASE64}`);
+
+        var requestOptions = {
+            method: 'GET',
+            headers: myHeaders
+        };
+
+        return await fetch(`${env.API_BASE_URL()}/doctor`, requestOptions)
+            .then(response => {
+                if (response.ok) {
+                    return response.json()
+                }
+                throw new BadResponse(`Impossible de recupérer les rencontres (${response.status})`, "Opencare")
+            }).then(({ results }) => {
+                const res: Array<any> = results
+                return res.map((doctor) => {
+                    return {
+                        id: doctor.uuid,
+                        name: doctor.person.display,
+                    }
+                })
+            })
+    }
+
 }
 
 export default ProdOpencareRepository;

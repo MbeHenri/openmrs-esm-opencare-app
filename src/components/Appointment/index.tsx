@@ -7,11 +7,16 @@ import {
   Switch,
   Tile,
 } from "@carbon/react";
-import { useConfig, useLayoutType } from "@openmrs/esm-framework";
+import {
+  useConfig,
+  useLayoutType,
+  //launchWorkspaces
+} from "@openmrs/esm-framework";
 import PatientAppointmentsTable from "./tab";
 import styles from "./index.scss";
 import DoctorService, { AppointmentTypes } from "../../services/doctor";
 import env from "../../repositories/env";
+import { MeetIframe } from "../MeetIframe";
 
 interface PatientAppointmentsBaseProps {
   patientUuid: string;
@@ -69,6 +74,10 @@ const PatientAppointmentsBase: React.FC<PatientAppointmentsBaseProps> = ({
 
   const handleUrlMeeting = useCallback((url: string) => {
     setUrl(url);
+    /* launchWorkspace("opencare-meet-iframe", {
+      url,
+      context: "view",
+    }); */
   }, []);
 
   // II. returns
@@ -156,15 +165,7 @@ const PatientAppointmentsBase: React.FC<PatientAppointmentsBaseProps> = ({
 
       {(() => {
         if (url != "") {
-          return (
-            <div className={styles.contentViewWrapper}>
-              <iframe
-                title="Web Meeting"
-                src={url}
-                style={{ width: "100%", height: "100%" }}
-              />
-            </div>
-          );
+          return <MeetIframe url={url} />;
         }
       })()}
     </>
