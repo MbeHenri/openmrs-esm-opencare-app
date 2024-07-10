@@ -1,5 +1,5 @@
 {
-  "name": "@mbehenri/esm-opencare-app",
+  "name": "@mbehenri/openmrs-esm-opencare-app",
   "version": "1.0.0",
   "license": "MPL-2.0",
   "description": "The OpenMRS Opencare application (micro front-end)",

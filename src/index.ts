@@ -4,12 +4,10 @@
  * connects the app shell to the React application(s) that make up this
  * microfrontend.
  */
-import { defineConfigSchema, getSyncLifecycle } from "@openmrs/esm-framework";
+import { getAsyncLifecycle, defineConfigSchema, getSyncLifecycle } from "@openmrs/esm-framework";
 import { configSchema } from "./config-schema";
-import { createLeftPanelLink } from "./left-panel-link.component";
 import Root from "./root.component";
-import { PaymentDashboardMeta, meetingDashboardMeta } from "./dashboard.meta";
-import DemandTabExt from "./Extensions/DemandTab";
+import DemandTabExt from "./Extensions/DemandTabExt";
 import AppointmentTabExt from "./Extensions/AppointmentTabExt";
 import MeetIframeExt from "./Extensions/MeetIframeExt";
 import { ValidateDemandFormExt } from "./Extensions/ValidateDemandFormExt";
@@ -55,21 +53,6 @@ export function startupApp() {
 ); */
 
 export const root = getSyncLifecycle(Root, options);
-
-export const meeting = getSyncLifecycle(
-  createLeftPanelLink(meetingDashboardMeta),
-  options
-);
-
-export const payment = getSyncLifecycle(
-  createLeftPanelLink(PaymentDashboardMeta),
-  options
-);
-
-/* export const roombutton = getSyncLifecycle(
-  RoomButtonExt,
-  options
-); */
 
 export const demandtab = getSyncLifecycle(
   DemandTabExt,

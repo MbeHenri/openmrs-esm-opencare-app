@@ -1,4 +1,3 @@
-
 export class BadResponse extends Error {
     constructor(message: string = "", name: string = "") {
         super(message);

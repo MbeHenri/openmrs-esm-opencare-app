@@ -10,12 +10,7 @@
 
 import React, { useEffect } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { Payment } from "./pages/payment/payment.component";
-import { Meeting } from "./pages/metting/meeting.component";
-import { DetailMeeting } from "./pages/metting/details.component";
-import RestrictComponent from "./components/RestrictComponent";
 import { Home } from "./pages/home/home.component";
-import { Unauthorized } from "./pages/unauthorized";
 import { useConfig } from "@openmrs/esm-framework";
 import env from "./repositories/env";
 // import { useTranslation } from "react-i18next";
@@ -35,10 +30,6 @@ const Root: React.FC = () => {
     env.API_PASSWORD = conf["API_PASSWORD"];
     env.API_PORT = conf["API_PORT"];
     env.API_USER = conf["API_USER"];
-    env.TALK_HOST = conf["TALK_HOST"];
-    env.TALK_PASSWORD = conf["TALK_PASSWORD"];
-    env.TALK_PORT = conf["TALK_PORT"];
-    env.TALK_USER = conf["TALK_USER"];
     return () => {};
   }, []);
 
@@ -46,46 +37,7 @@ const Root: React.FC = () => {
     <BrowserRouter basename={basename}>
       <Routes>
         {/* Route de la page d'acceuil */}
-        <Route
-          path="/home"
-          element={
-            <RestrictComponent redirect>
-              <Home />
-            </RestrictComponent>
-          }
-        />
-
-        {/* Route des meetings */}
-        <Route
-          path="/meeting"
-          element={
-            <RestrictComponent redirect>
-              <Meeting />
-            </RestrictComponent>
-          }
-        />
-
-        {/* Route d'une conversation précise */}
-        <Route
-          path="/meeting/:token"
-          element={
-            <RestrictComponent redirect>
-              <DetailMeeting />
-            </RestrictComponent>
-          }
-        />
-
-        {/* Route de l'espace facturation */}
-        <Route
-          path="/payment"
-          element={
-            <RestrictComponent redirect>
-              <Payment />
-            </RestrictComponent>
-          }
-        />
-        {/* Route de la vue non authorizé */}
-        <Route path="/unauthorized" element={<Unauthorized />} />
+        <Route path="/home" element={<Home />} />
       </Routes>
     </BrowserRouter>
   );
