@@ -6,26 +6,6 @@
   },
   "extensions": [
     {
-      "component": "meeting",
-      "name": "meeting-home-left-panel-link",
-      "slot": "homepage-dashboard-slot",
-      "meta": {
-        "name": "meeting",
-        "slot": "opencare-dashboard-slot",
-        "title": "Meeting"
-      }
-    },
-    {
-      "component": "payment",
-      "name": "payment-home-left-panel-link",
-      "slot": "homepage-dashboard-slot",
-      "meta": {
-        "name": "payment",
-        "slot": "opencare-dashboard-slot",
-        "title": "Payment"
-      }
-    },
-    {
       "component": "demandtab",
       "name": "opencare-demand-tab",
       "slot": "homepage-widgets-slot"
