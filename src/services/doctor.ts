@@ -99,26 +99,27 @@ class DoctorService {
             res.forEach((appointment, i) => {
 
                 const date = new Date(appointment.startDateTime)
-
-                if (date > datenow) {
-                    appointments.get(AppointmentTypes.UPCOMING).push({
-                        ...appointment,
-                        appointmentTimeType: AppointmentTypes.UPCOMING
-                    })
-                } else {
-                    if (date.getDay() == datenow.getDate() &&
-                        date.getMonth() == datenow.getMonth() &&
-                        date.getFullYear() == datenow.getFullYear()
-                    ) {
-                        appointments.get(AppointmentTypes.TODAY).push({
+                if (appointment.statusProgress && appointment.statusProgress != "Cancelled") {
+                    if (date > datenow) {
+                        appointments.get(AppointmentTypes.UPCOMING).push({
                             ...appointment,
-                            appointmentTimeType: AppointmentTypes.TODAY
+                            appointmentTimeType: AppointmentTypes.UPCOMING
                         })
                     } else {
-                        appointments.get(AppointmentTypes.PAST).push({
-                            ...appointment,
-                            appointmentTimeType: AppointmentTypes.PAST
-                        })
+                        if (date.getDay() == datenow.getDate() &&
+                            date.getMonth() == datenow.getMonth() &&
+                            date.getFullYear() == datenow.getFullYear()
+                        ) {
+                            appointments.get(AppointmentTypes.TODAY).push({
+                                ...appointment,
+                                appointmentTimeType: AppointmentTypes.TODAY
+                            })
+                        } else {
+                            appointments.get(AppointmentTypes.PAST).push({
+                                ...appointment,
+                                appointmentTimeType: AppointmentTypes.PAST
+                            })
+                        }
                     }
                 }
             })
