@@ -52,9 +52,10 @@ const DemandTab: React.FC = ({}) => {
   env.API_PASSWORD = conf["API_PASSWORD"];
   env.API_PORT = conf["API_PORT"];
   env.API_USER = conf["API_USER"];
+  env.API_SECURE = conf["API_SECURE"];
   const doctorService = DoctorService.getInstance();
 
-  const [reload, setReload] = useState("");
+  //const [reload, setReload] = useState("");
 
   useEffect(() => {
     const fun = async () => {
@@ -196,11 +197,12 @@ const DemandTab: React.FC = ({}) => {
                                   handleReject(demands[i]);
                                 }}
                               >
-                                Rejet
+                                Reject
                               </Button>
                               <Button
                                 kind="primary"
                                 size="small"
+                                disable={processing}
                                 onClick={() => {
                                   handleValidate(demands[i]);
                                 }}

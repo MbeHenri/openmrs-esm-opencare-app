@@ -39,8 +39,13 @@ export const configSchema = {
     API_HOST: {
         _type: Type.String,
         _default: "127.0.0.1",
-        _description: 'Talk host used',
+        _description: 'API host used',
     },
+    API_SECURE: {
+        _type: Type.Boolean,
+        _default: false,
+        _description: 'API is secure or not',
+    }
 };
 
 export type Config = {
@@ -48,4 +53,5 @@ export type Config = {
     API_PASSWORD: string,
     API_PORT: string,
     API_HOST: string,
+    API_SECURE: boolean,
 };

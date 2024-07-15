@@ -42,6 +42,7 @@ it("renders a landing page for the opencare app", () => {
     API_PASSWORD: "Admin123",
     API_PORT: "8010",
     API_USER: "admin",
+    API_SECURE: false,
   };
   mockUseConfig.mockReturnValue(config);
 

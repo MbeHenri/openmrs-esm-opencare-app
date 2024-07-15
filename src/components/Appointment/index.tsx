@@ -48,6 +48,7 @@ const PatientAppointmentsBase: React.FC<PatientAppointmentsBaseProps> = ({
   env.API_PASSWORD = conf["API_PASSWORD"];
   env.API_PORT = conf["API_PORT"];
   env.API_USER = conf["API_USER"];
+  env.API_SECURE = conf["API_SECURE"];
   const doctorService = DoctorService.getInstance();
 
   useEffect(() => {

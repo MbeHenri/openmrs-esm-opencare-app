@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Form,
   FormGroup,
@@ -12,10 +12,11 @@ import {
   Button,
 } from "@carbon/react";
 import { Layer, Tile } from "@carbon/react";
-import { showToast, useConfig, useLayoutType } from "@openmrs/esm-framework";
+import { showToast, useConfig /*useLayoutType*/ } from "@openmrs/esm-framework";
 import styles from "./form.scss";
 import env from "../../repositories/env";
 import DoctorService from "../../services/doctor";
+//import { inLocalTimeOffsetUTC } from "../../utils";
 
 export interface ValidateDemandFormProps {
   demand: any;
@@ -31,7 +32,7 @@ export const ValidateDemandForm: React.FC<ValidateDemandFormProps> = ({
   demand,
   onClose,
 }) => {
-  const isTablet = useLayoutType() === "tablet";
+  //const isTablet = useLayoutType() === "tablet";
 
   const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
   const [startDate, setStartDate] = useState<Date | null>(null);
@@ -40,6 +41,8 @@ export const ValidateDemandForm: React.FC<ValidateDemandFormProps> = ({
   const [duration, setDuration] = useState<number>(0);
   const [doctors, setDoctors] = useState([]);
   //recupération de la configuration
+
+  const [processing, setProcessing] = useState(false);
   const conf = useConfig();
 
   // update env variable
@@ -48,6 +51,7 @@ export const ValidateDemandForm: React.FC<ValidateDemandFormProps> = ({
   env.API_PASSWORD = conf["API_PASSWORD"];
   env.API_PORT = conf["API_PORT"];
   env.API_USER = conf["API_USER"];
+  env.API_SECURE = conf["API_SECURE"];
   const doctorService = DoctorService.getInstance();
 
   useEffect(() => {
@@ -63,12 +67,15 @@ export const ValidateDemandForm: React.FC<ValidateDemandFormProps> = ({
     return () => {};
   }, []);
 
-  const handleDoctorChange = (selectedItem: any) => {
-    const doctor = doctors.find(
-      (doc) => doc.name === selectedItem.selectedItem
-    );
-    setSelectedDoctor(doctor || null);
-  };
+  const handleDoctorChange = useCallback(
+    (selectedItem: any) => {
+      const doctor = doctors.find(
+        (doc) => doc.name === selectedItem.selectedItem
+      );
+      setSelectedDoctor(doctor || null);
+    },
+    [doctors]
+  );
 
   const handleStartDateChange = (date: Date[]) => {
     setStartDate(date[0] || null);
@@ -86,47 +93,54 @@ export const ValidateDemandForm: React.FC<ValidateDemandFormProps> = ({
     setDuration(event.target.value);
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = useCallback(async () => {
     if (startDate && startTime) {
-      let [hours, minutes] = startTime.split(":").map(Number);
-      if (ampm === "PM" && hours < 12) {
-        hours += 12;
-      }
-      if (ampm === "AM" && hours === 12) {
-        hours = 0;
-      }
-      const combinedDateTime = new Date(startDate);
-      combinedDateTime.setHours(hours, minutes);
+      if (!processing) {
+        setProcessing(true);
+        let [hours, minutes] = startTime.split(":").map(Number);
+        if (ampm === "PM" && hours < 12) {
+          hours += 12;
+        }
+        if (ampm === "AM" && hours === 12) {
+          hours = 0;
+        }
+        const combinedDateTime = new Date(startDate);
+        combinedDateTime.setHours(hours, minutes);
 
-      // Gestion de la soumission du formulaire
-      const res = await doctorService.validateDemand(
-        demand.id,
-        selectedDoctor.id,
-        combinedDateTime,
-        duration
-      );
-      /* const res = true; */
-      if (res) {
-        showToast({
-          description: `the demand initiated by ${demand.patient} have been validated`,
-          kind: "success",
-        });
-      } else {
-        showToast({ description: `error during validation`, kind: "error" });
+        // Gestion de la soumission du formulaire
+        const res = await doctorService.validateDemand(
+          demand.id,
+          selectedDoctor.id,
+          combinedDateTime,
+          duration
+        );
+        /* const res = true; */
+        if (res) {
+          showToast({
+            description: `the demand initiated by ${demand.patient} have been validated`,
+            kind: "success",
+          });
+        } else {
+          showToast({ description: `error during validation`, kind: "error" });
+        }
+        setProcessing(false);
+        if (onClose) {
+          onClose();
+        }
       }
+    }
+  }, [processing]);
+
+  const handleCancel = useCallback(() => {
+    // Gestion de l'annulation du formulaire
+    /* showToast({ description: `cancel` }); */
+    if (!processing) {
       if (onClose) {
         onClose();
       }
     }
-  };
+  }, [processing]);
 
-  const handleCancel = () => {
-    // Gestion de l'annulation du formulaire
-    /* showToast({ description: `cancel` }); */
-    if (onClose) {
-      onClose();
-    }
-  };
   return (
     <Layer>
       <Tile>
@@ -193,6 +207,7 @@ export const ValidateDemandForm: React.FC<ValidateDemandFormProps> = ({
             size="large"
             className={styles.formButton}
             onClick={handleCancel}
+            disable={processing}
           >
             Cancel
           </Button>
@@ -200,9 +215,10 @@ export const ValidateDemandForm: React.FC<ValidateDemandFormProps> = ({
             kind="primary"
             size="large"
             className={styles.formButton}
+            disable={processing}
             onClick={handleSubmit}
           >
-            Validate
+            {processing ? "Validate ..." : "Validate"}
           </Button>
         </div>
       </Form>
