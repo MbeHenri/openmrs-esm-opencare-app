@@ -38,7 +38,7 @@ export const ValidateDemandForm: React.FC<ValidateDemandFormProps> = ({
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [startTime, setStartTime] = useState<string>("00:00");
   const [ampm, setAmpm] = useState<string>("AM");
-  const [duration, setDuration] = useState<number>(0);
+  const [duration, setDuration] = useState<number>(30);
   const [doctors, setDoctors] = useState([]);
   //recupération de la configuration
 
@@ -67,15 +67,12 @@ export const ValidateDemandForm: React.FC<ValidateDemandFormProps> = ({
     return () => {};
   }, []);
 
-  const handleDoctorChange = useCallback(
-    (selectedItem: any) => {
-      const doctor = doctors.find(
-        (doc) => doc.name === selectedItem.selectedItem
-      );
-      setSelectedDoctor(doctor || null);
-    },
-    [doctors]
-  );
+  const handleDoctorChange = (selectedItem: any) => {
+    const doctor = doctors.find(
+      (doc) => doc.name === selectedItem.selectedItem
+    );
+    setSelectedDoctor(doctor || null);
+  };
 
   const handleStartDateChange = (date: Date[]) => {
     setStartDate(date[0] || null);
@@ -93,8 +90,8 @@ export const ValidateDemandForm: React.FC<ValidateDemandFormProps> = ({
     setDuration(event.target.value);
   };
 
-  const handleSubmit = useCallback(async () => {
-    if (startDate && startTime) {
+  const handleSubmit = async () => {
+    if (startDate && startTime && duration > 0) {
       if (!processing) {
         setProcessing(true);
         let [hours, minutes] = startTime.split(":").map(Number);
@@ -108,30 +105,38 @@ export const ValidateDemandForm: React.FC<ValidateDemandFormProps> = ({
         combinedDateTime.setHours(hours, minutes);
 
         // Gestion de la soumission du formulaire
-        const res = await doctorService.validateDemand(
-          demand.id,
-          selectedDoctor.id,
-          combinedDateTime,
-          duration
-        );
-        /* const res = true; */
-        if (res) {
-          showToast({
-            description: `the demand initiated by ${demand.patient} have been validated`,
-            kind: "success",
+        await doctorService
+          .validateDemand(
+            demand.id,
+            selectedDoctor.id,
+            combinedDateTime,
+            duration
+          )
+          .then((res) => {
+            /* const res = true; */
+            if (res) {
+              showToast({
+                description: `the demand initiated by ${demand.patient} have been validated`,
+                kind: "success",
+              });
+            } else {
+              showToast({
+                description: `error during validation`,
+                kind: "error",
+              });
+            }
+          })
+          .finally(() => {
+            setProcessing(false);
+            if (onClose) {
+              onClose();
+            }
           });
-        } else {
-          showToast({ description: `error during validation`, kind: "error" });
-        }
-        setProcessing(false);
-        if (onClose) {
-          onClose();
-        }
       }
     }
-  }, [processing]);
+  };
 
-  const handleCancel = useCallback(() => {
+  const handleCancel = () => {
     // Gestion de l'annulation du formulaire
     /* showToast({ description: `cancel` }); */
     if (!processing) {
@@ -139,7 +144,7 @@ export const ValidateDemandForm: React.FC<ValidateDemandFormProps> = ({
         onClose();
       }
     }
-  }, [processing]);
+  };
 
   return (
     <Layer>
@@ -195,7 +200,7 @@ export const ValidateDemandForm: React.FC<ValidateDemandFormProps> = ({
           >
             <NumberInput
               id="duration-input"
-              min={0}
+              min={10}
               value={duration}
               onChange={handleDurationChange}
             />
@@ -218,7 +223,7 @@ export const ValidateDemandForm: React.FC<ValidateDemandFormProps> = ({
             disable={processing}
             onClick={handleSubmit}
           >
-            {processing ? "Validate ..." : "Validate"}
+            {processing ? "Validating ..." : "Validate"}
           </Button>
         </div>
       </Form>
