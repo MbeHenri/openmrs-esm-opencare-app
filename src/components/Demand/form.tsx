@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Form,
   FormGroup,
@@ -52,7 +52,7 @@ export const ValidateDemandForm: React.FC<ValidateDemandFormProps> = ({
   env.API_PORT = conf["API_PORT"];
   env.API_USER = conf["API_USER"];
   env.API_SECURE = conf["API_SECURE"];
-  const doctorService = DoctorService.getInstance();
+  const doctorService = useMemo(() => DoctorService.getInstance(), []);
 
   useEffect(() => {
     const fun = async () => {
@@ -64,31 +64,35 @@ export const ValidateDemandForm: React.FC<ValidateDemandFormProps> = ({
     };
     fun();
 
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     return () => {};
+  }, [doctorService]);
+
+  const handleDoctorChange = useCallback(
+    (selectedItem: any) => {
+      const doctor = doctors.find(
+        (doc) => doc.name === selectedItem.selectedItem
+      );
+      setSelectedDoctor(doctor || null);
+    },
+    [doctors]
+  );
+
+  const handleStartDateChange = useCallback((date: Date[]) => {
+    setStartDate(date[0] || null);
   }, []);
 
-  const handleDoctorChange = (selectedItem: any) => {
-    const doctor = doctors.find(
-      (doc) => doc.name === selectedItem.selectedItem
-    );
-    setSelectedDoctor(doctor || null);
-  };
-
-  const handleStartDateChange = (date: Date[]) => {
-    setStartDate(date[0] || null);
-  };
-
-  const handleStartTimeChange = (event: any) => {
+  const handleStartTimeChange = useCallback((event: any) => {
     setStartTime(event.target.value);
-  };
+  }, []);
 
-  const handleAmpmChange = (event: any) => {
+  const handleAmpmChange = useCallback((event: any) => {
     setAmpm(event.target.value);
-  };
+  }, []);
 
-  const handleDurationChange = (event: any) => {
+  const handleDurationChange = useCallback((event: any) => {
     setDuration(event.target.value);
-  };
+  }, []);
 
   const handleSubmit = async () => {
     if (startDate && startTime && duration > 0) {
@@ -136,7 +140,7 @@ export const ValidateDemandForm: React.FC<ValidateDemandFormProps> = ({
     }
   };
 
-  const handleCancel = () => {
+  const handleCancel = useCallback(() => {
     // Gestion de l'annulation du formulaire
     /* showToast({ description: `cancel` }); */
     if (!processing) {
@@ -144,7 +148,7 @@ export const ValidateDemandForm: React.FC<ValidateDemandFormProps> = ({
         onClose();
       }
     }
-  };
+  }, [onClose, processing]);
 
   return (
     <Layer>

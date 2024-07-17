@@ -1,6 +1,6 @@
 import { formatDatetime, parseDate } from "@openmrs/esm-framework";
 import { getOpencareRepository } from "../repositories/Opencare";
-import OpencareRepository from "../repositories/Opencare/repository";
+import type OpencareRepository from "../repositories/Opencare/repository";
 
 export enum AppointmentTypes {
   UPCOMING = 0,
@@ -48,7 +48,7 @@ class DoctorService {
         });
       });
     } catch (error) {
-      console.log(error);
+      /* console.log(error); */
       return null;
     }
   }
@@ -62,7 +62,7 @@ class DoctorService {
       await this.opencare_rep.rejectDemand(demand_id);
       return true;
     } catch (error) {
-      console.log(error);
+      /* console.log(error); */
       return null;
     }
   }
@@ -75,7 +75,7 @@ class DoctorService {
     demand_id: string,
     doctor_id: string,
     startDate: Date = new Date(),
-    duration: number = 30
+    duration = 30
   ): Promise<any> {
     try {
       await this.opencare_rep.vaidateDemand(
@@ -86,7 +86,7 @@ class DoctorService {
       );
       return true;
     } catch (error) {
-      console.log(error);
+      /* console.log(error); */
       return null;
     }
   }
@@ -108,7 +108,7 @@ class DoctorService {
         if (appointment.status != "Cancelled") {
           const date = new Date(appointment.startDateTime);
 
-          console.log(` comp : ${date} - ${datenow}`);
+          /* console.log(` comp : ${date} - ${datenow}`); */
 
           if (date > datenow) {
             upcoming.push({
@@ -139,7 +139,7 @@ class DoctorService {
       appointments.set(AppointmentTypes.TODAY, today);
       appointments.set(AppointmentTypes.UPCOMING, upcoming);
 
-      console.log(appointments);
+      /* console.log(appointments); */
 
       return appointments;
     } catch (error) {
@@ -151,7 +151,7 @@ class DoctorService {
     try {
       return await this.opencare_rep.getProviders();
     } catch (error) {
-      console.log(error);
+      /* console.log(error); */
       return null;
     }
   }

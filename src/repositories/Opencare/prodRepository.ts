@@ -2,146 +2,170 @@ import { BadResponse } from "../errors";
 import env from "../env";
 import OpencareRepository from "./repository";
 
-
 class ProdOpencareRepository extends OpencareRepository {
+  async getDemands(): Promise<Array<any>> {
+    let myHeaders = new Headers();
+    myHeaders.append("Accept", "application/json,");
+    myHeaders.append("Content-Type", "application/json");
+    //myHeaders.append("Authorization", `Basic ${TALK_BASE64}`);
 
-    async getDemands(): Promise<Array<any>> {
+    let requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+    };
+    const demandProgressStatus = "2";
+    return await fetch(
+      `${env.API_BASE_URL()}/demand?status=${demandProgressStatus}`,
+      requestOptions
+    )
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        }
+        throw new BadResponse(
+          `Impossible de recupérer les démandes (${response.status})`,
+          "Opencare"
+        );
+      })
+      .then(({ results }) => {
+        const res: Array<any> = results;
+        return res;
+      });
+  }
 
-        var myHeaders = new Headers();
-        myHeaders.append("Accept", "application/json,");
-        myHeaders.append("Content-Type", "application/json");
-        //myHeaders.append("Authorization", `Basic ${TALK_BASE64}`);
+  async getAppointments(patientUuid: string): Promise<Array<any>> {
+    let myHeaders = new Headers();
+    myHeaders.append("Accept", "application/json,");
+    myHeaders.append("Content-Type", "application/json");
+    //myHeaders.append("Authorization", `Basic ${TALK_BASE64}`);
 
-        var requestOptions = {
-            method: 'GET',
-            headers: myHeaders
-        };
-        const demandProgressStatus = "2"
-        return await fetch(`${env.API_BASE_URL()}/demand?status=${demandProgressStatus}`, requestOptions)
-            .then(response => {
-                if (response.ok) {
-                    return response.json()
-                }
-                throw new BadResponse(`Impossible de recupérer les démandes (${response.status})`, "Opencare")
-            }).then(({ results }) => {
-                const res: Array<any> = results
-                return res
-            })
+    let requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+    };
 
-    }
-
-    async getAppointments(patientUuid: string): Promise<Array<any>> {
-
-        var myHeaders = new Headers();
-        myHeaders.append("Accept", "application/json,");
-        myHeaders.append("Content-Type", "application/json");
-        //myHeaders.append("Authorization", `Basic ${TALK_BASE64}`);
-
-        var requestOptions = {
-            method: 'GET',
-            headers: myHeaders
-        };
-
-        return await fetch(`${env.API_BASE_URL()}/patient/${patientUuid}/appointment`, requestOptions)
-            .then(response => {
-                if (response.ok) {
-                    return response.json()
-                }
-                throw new BadResponse(`Impossible de recupérer les rencontres (${response.status})`, "Opencare")
-            }).then(({ results }) => {
-                const res: Array<any> = results
-                return res.map((appointment) => {
-                    return {
-                        uuid: appointment.uuid,
-                        startDateTime: appointment.startDateTime,
-                        location: "",
-                        service: appointment.service,
-                        status: appointment.statusProgress,
-                        appointmentKind: "Scheduled",
-                        comments: "",
-                        linkRoom: appointment.linkRoom,
-                        patientUuid,
-
-                    }
-                })
-            })
-    }
-
-
-    async rejectDemand(demand_id: string): Promise<void> {
-        var myHeaders = new Headers();
-        myHeaders.append("Accept", "application/json,");
-        myHeaders.append("Content-Type", "application/json");
-        //myHeaders.append("Authorization", `Basic ${TALK_BASE64}`);
-
-        var requestOptions = {
-            method: 'PUT',
-            headers: myHeaders
-        };
-        await fetch(`${env.API_BASE_URL()}/demand/${demand_id}/reject`, requestOptions)
-            .then(response => {
-                if (response.ok) {
-                    return response.json()
-                }
-                throw new BadResponse(`Impossible de rejeter la demande (${response.status})`, "Opencare")
-            })
-    }
-
-    async vaidateDemand(demand_id: string, doctor_id: string, startDate: Date = new Date(), duration: number = 30): Promise<void> {
-        const myHeaders = new Headers();
-        myHeaders.append("Accept", "application/json,");
-        myHeaders.append("Content-Type", "application/json");
-
-        const raw = JSON.stringify({
-            "doctor_id": doctor_id,
-            "duration": duration,
-            "date_meeting": startDate.toISOString(),
+    return await fetch(
+      `${env.API_BASE_URL()}/patient/${patientUuid}/appointment`,
+      requestOptions
+    )
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        }
+        throw new BadResponse(
+          `Impossible de recupérer les rencontres (${response.status})`,
+          "Opencare"
+        );
+      })
+      .then(({ results }) => {
+        const res: Array<any> = results;
+        return res.map((appointment) => {
+          return {
+            uuid: appointment.uuid,
+            startDateTime: appointment.startDateTime,
+            location: "",
+            service: appointment.service,
+            status: appointment.statusProgress,
+            appointmentKind: "Scheduled",
+            comments: "",
+            linkRoom: appointment.linkRoom,
+            patientUuid,
+          };
         });
+      });
+  }
 
-        const requestOptions = {
-            method: "POST",
-            headers: myHeaders,
-            body: raw
-        };
+  async rejectDemand(demand_id: string): Promise<void> {
+    let myHeaders = new Headers();
+    myHeaders.append("Accept", "application/json,");
+    myHeaders.append("Content-Type", "application/json");
+    //myHeaders.append("Authorization", `Basic ${TALK_BASE64}`);
 
-        await fetch(`${env.API_BASE_URL()}/demand/${demand_id}/validate`, requestOptions)
-            .then(response => {
-                if (response.ok) {
-                    return response.json()
-                }
-                throw new BadResponse(`Impossible de valider la demande (${response.status})`, "Opencare")
-            })
-    }
+    let requestOptions = {
+      method: "PUT",
+      headers: myHeaders,
+    };
+    await fetch(
+      `${env.API_BASE_URL()}/demand/${demand_id}/reject`,
+      requestOptions
+    ).then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+      throw new BadResponse(
+        `Impossible de rejeter la demande (${response.status})`,
+        "Opencare"
+      );
+    });
+  }
 
-    async getProviders(): Promise<Array<any>> {
+  async vaidateDemand(
+    demand_id: string,
+    doctor_id: string,
+    startDate: Date = new Date(),
+    duration = 30
+  ): Promise<void> {
+    const myHeaders = new Headers();
+    myHeaders.append("Accept", "application/json,");
+    myHeaders.append("Content-Type", "application/json");
 
-        var myHeaders = new Headers();
-        myHeaders.append("Accept", "application/json,");
-        myHeaders.append("Content-Type", "application/json");
-        //myHeaders.append("Authorization", `Basic ${TALK_BASE64}`);
+    const raw = JSON.stringify({
+      doctor_id: doctor_id,
+      duration: duration,
+      date_meeting: startDate.toISOString(),
+    });
 
-        var requestOptions = {
-            method: 'GET',
-            headers: myHeaders
-        };
+    const requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+    };
 
-        return await fetch(`${env.API_BASE_URL()}/doctor`, requestOptions)
-            .then(response => {
-                if (response.ok) {
-                    return response.json()
-                }
-                throw new BadResponse(`Impossible de recupérer les rencontres (${response.status})`, "Opencare")
-            }).then(({ results }) => {
-                const res: Array<any> = results
-                return res.map((doctor) => {
-                    return {
-                        id: doctor.uuid,
-                        name: doctor.person.display,
-                    }
-                })
-            })
-    }
+    await fetch(
+      `${env.API_BASE_URL()}/demand/${demand_id}/validate`,
+      requestOptions
+    ).then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+      throw new BadResponse(
+        `Impossible de valider la demande (${response.status})`,
+        "Opencare"
+      );
+    });
+  }
 
+  async getProviders(): Promise<Array<any>> {
+    let myHeaders = new Headers();
+    myHeaders.append("Accept", "application/json,");
+    myHeaders.append("Content-Type", "application/json");
+    //myHeaders.append("Authorization", `Basic ${TALK_BASE64}`);
+
+    let requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+    };
+
+    return await fetch(`${env.API_BASE_URL()}/doctor`, requestOptions)
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        }
+        throw new BadResponse(
+          `Impossible de recupérer les rencontres (${response.status})`,
+          "Opencare"
+        );
+      })
+      .then(({ results }) => {
+        const res: Array<any> = results;
+        return res.map((doctor) => {
+          return {
+            id: doctor.uuid,
+            name: doctor.person.display,
+          };
+        });
+      });
+  }
 }
 
 export default ProdOpencareRepository;

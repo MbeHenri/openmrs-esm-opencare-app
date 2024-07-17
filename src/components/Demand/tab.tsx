@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
 import { useState } from "react";
 import {
   Button,
@@ -16,7 +16,7 @@ import {
 } from "@carbon/react";
 
 import {
-  ToastType,
+  type ToastType,
   isDesktop,
   showModal,
   showToast,
@@ -35,7 +35,7 @@ const headers = [
   { key: "action", header: "Action" },
 ];
 
-const DemandTab: React.FC = ({}) => {
+const DemandTab: React.FC = (/* {} */) => {
   //I. hooks
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -53,7 +53,7 @@ const DemandTab: React.FC = ({}) => {
   env.API_PORT = conf["API_PORT"];
   env.API_USER = conf["API_USER"];
   env.API_SECURE = conf["API_SECURE"];
-  const doctorService = DoctorService.getInstance();
+  const doctorService = useMemo(() => DoctorService.getInstance(), []);
 
   //const [reload, setReload] = useState("");
 
@@ -76,58 +76,65 @@ const DemandTab: React.FC = ({}) => {
     };
     fun();
 
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     return () => {};
-  }, []);
+  }, [doctorService]);
 
   const [processing, setProcessing] = useState(false);
-  const handleReject = useCallback(async (demand) => {
-    if (!processing) {
-      setProcessing(true);
-      const res = await doctorService.rejectDemand(demand.id);
-      let message = "";
-      let type: ToastType = "error";
-      if (res) {
-        message = `the demand initiated by ${demand.patient} have been rejected`;
-        await doctorService.getDemands().then((demands) => {
-          if (demands) {
-            setDemands(demands);
-            type = "success";
-          } else {
-            setError(true);
-          }
-        });
-      } else {
-        message = `Erreur de rejet`;
-      }
-      setProcessing(false);
-      showToast({ description: message, kind: type });
-    }
-  }, []);
-
-  const handleValidate = useCallback(async (demand) => {
-    if (!processing) {
-      setProcessing(true);
-      const dispose = showModal(
-        "opencare-validate-demand-form",
-        {
-          demand,
-          onClose: () => {
-            dispose();
-          },
-        },
-        async () => {
+  const handleReject = useCallback(
+    async (demand) => {
+      if (!processing) {
+        setProcessing(true);
+        const res = await doctorService.rejectDemand(demand.id);
+        let message = "";
+        let type: ToastType = "error";
+        if (res) {
+          message = `the demand initiated by ${demand.patient} have been rejected`;
           await doctorService.getDemands().then((demands) => {
             if (demands) {
               setDemands(demands);
+              type = "success";
             } else {
               setError(true);
             }
           });
-          setProcessing(false);
+        } else {
+          message = `Erreur de rejet`;
         }
-      );
-    }
-  }, []);
+        setProcessing(false);
+        showToast({ description: message, kind: type });
+      }
+    },
+    [doctorService, processing]
+  );
+
+  const handleValidate = useCallback(
+    async (demand) => {
+      if (!processing) {
+        setProcessing(true);
+        const dispose = showModal(
+          "opencare-validate-demand-form",
+          {
+            demand,
+            onClose: () => {
+              dispose();
+            },
+          },
+          async () => {
+            await doctorService.getDemands().then((demands) => {
+              if (demands) {
+                setDemands(demands);
+              } else {
+                setError(true);
+              }
+            });
+            setProcessing(false);
+          }
+        );
+      }
+    },
+    [doctorService, processing]
+  );
 
   // II. returns
   if (loading) {

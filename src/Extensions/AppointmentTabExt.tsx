@@ -2,9 +2,9 @@ import React from "react";
 import PatientAppointmentsBase from "../components/Appointment";
 import { usePatient } from "@openmrs/esm-framework";
 
-interface Props {}
+/* interface Props {} */
 
-const AppointmentTabExt: React.FC<Props> = ({}) => {
+const AppointmentTabExt: React.FC /* <Props> */ = () => {
   const { isLoading, patientUuid, error } = usePatient();
 
   return (

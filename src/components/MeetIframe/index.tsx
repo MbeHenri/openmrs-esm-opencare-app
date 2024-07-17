@@ -4,13 +4,16 @@ import styles from "./index.scss";
 interface MeetIframeProps {
   url: string;
 }
+
 export const MeetIframe: React.FC<MeetIframeProps> = ({ url }) => {
   return (
     <div className={styles.contentViewWrapper}>
+      <span className={styles.spinner}></span>
       <iframe
+        className={styles.viewer}
         title="Web Meeting"
         src={url}
-        style={{ width: "100%", height: "100%" }}
+        allow="camera;microphone"
       />
     </div>
   );

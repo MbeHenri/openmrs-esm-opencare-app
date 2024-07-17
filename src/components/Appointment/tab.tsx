@@ -25,6 +25,7 @@ interface AppointmentTableProps {
 
 const PatientAppointmentsTable: React.FC<AppointmentTableProps> = ({
   appointments,
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   handleUrlMeeting = (url) => {},
 }) => {
   const { t } = useTranslation();
@@ -62,11 +63,14 @@ const PatientAppointmentsTable: React.FC<AppointmentTableProps> = ({
       }),
     [appointments]
   );
-  const basename = useMemo(() => window.getOpenmrsSpaBase() + "opencare", []);
+  //const basename = useMemo(() => window.getOpenmrsSpaBase() + "opencare", []);
 
-  const HandleJoin = useCallback((appointment) => {
-    handleUrlMeeting(appointment.linkRoom);
-  }, []);
+  const HandleJoin = useCallback(
+    (appointment) => {
+      handleUrlMeeting(appointment.linkRoom);
+    },
+    [handleUrlMeeting]
+  );
 
   return (
     <div style={{ marginBottom: "1rem" }}>

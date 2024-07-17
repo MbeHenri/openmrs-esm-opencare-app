@@ -1,9 +1,9 @@
 import React from "react";
 import DemandTab from "../components/Demand/tab";
 
-interface Props {}
+/* interface Props {} */
 
-const DemandTabExt: React.FC<Props> = ({}) => {
+const DemandTabExt: React.FC /* <Props> */ = (/* {} */) => {
   return (
     <div>
       <DemandTab />

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   ContentSwitcher,
@@ -49,7 +49,7 @@ const PatientAppointmentsBase: React.FC<PatientAppointmentsBaseProps> = ({
   env.API_PORT = conf["API_PORT"];
   env.API_USER = conf["API_USER"];
   env.API_SECURE = conf["API_SECURE"];
-  const doctorService = DoctorService.getInstance();
+  const doctorService = useMemo(() => DoctorService.getInstance(), []);
 
   useEffect(() => {
     const fun = async () => {
@@ -70,8 +70,9 @@ const PatientAppointmentsBase: React.FC<PatientAppointmentsBaseProps> = ({
     };
     fun();
 
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     return () => {};
-  }, []);
+  }, [doctorService, patientUuid]);
 
   const handleUrlMeeting = useCallback((url: string) => {
     setUrl(url);

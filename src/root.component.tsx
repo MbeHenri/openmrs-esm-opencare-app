@@ -31,8 +31,9 @@ const Root: React.FC = () => {
     env.API_PORT = conf["API_PORT"];
     env.API_USER = conf["API_USER"];
     env.API_SECURE = conf["API_SECURE"];
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     return () => {};
-  }, []);
+  }, [conf]);
 
   return (
     <BrowserRouter basename={basename}>
