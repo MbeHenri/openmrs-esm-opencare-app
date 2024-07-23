@@ -103,23 +103,24 @@ class DoctorService {
       const upcoming = [];
 
       const res = await this.opencare_rep.getAppointments(patientUuid);
-      const datenow = new Date();
+      let datenow = new Date();
       res.forEach((appointment, i) => {
         if (appointment.status != "Cancelled") {
-          const date = new Date(appointment.startDateTime);
+          const dateappt = new Date(appointment.startDateTime);
 
-          /* console.log(` comp : ${date} - ${datenow}`); */
+          // eslint-disable-next-line no-console
+          console.log(` comp : ${dateappt} - ${datenow}`);
 
-          if (date > datenow) {
+          if (dateappt > datenow) {
             upcoming.push({
               ...appointment,
               appointmentTimeType: AppointmentTypes.UPCOMING,
             });
           } else {
             if (
-              date.getDay() == datenow.getDay() &&
-              date.getMonth() == datenow.getMonth() &&
-              date.getFullYear() == datenow.getFullYear()
+              dateappt.getDay() == datenow.getDay() &&
+              dateappt.getMonth() == datenow.getMonth() &&
+              dateappt.getFullYear() == datenow.getFullYear()
             ) {
               today.push({
                 ...appointment,
