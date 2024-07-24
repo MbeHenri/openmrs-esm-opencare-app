@@ -1,22 +1,27 @@
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   DataTable,
   type DataTableHeader,
   Table,
+  Layer,
   TableCell,
   TableContainer,
   TableBody,
   TableHead,
   TableHeader,
   TableRow,
+  Pagination,
 } from "@carbon/react";
 import {
   formatDatetime,
+  isDesktop,
   parseDate,
   useLayoutType,
+  usePagination,
 } from "@openmrs/esm-framework";
 import { Button } from "@carbon/react";
+import { getPageSizes } from "../../utils";
 
 interface AppointmentTableProps {
   appointments: Array<any>;
@@ -28,21 +33,12 @@ const PatientAppointmentsTable: React.FC<AppointmentTableProps> = ({
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   handleUrlMeeting = (url) => {},
 }) => {
+  // I. hooks
+
   const { t } = useTranslation();
-
-  const isTablet = useLayoutType() === "tablet";
-
-  const tableHeaders: Array<typeof DataTableHeader> = useMemo(
-    () => [
-      { key: "date", header: t("date", "Date") },
-      { key: "location", header: t("location", "Location") },
-      { key: "service", header: t("service", "Service") },
-      { key: "status", header: t("status", "Status") },
-      { key: "type", header: t("type", "Type") },
-      { key: "notes", header: t("notes", "Notes") },
-    ],
-    [t]
-  );
+  const layout = useLayoutType();
+  const responsiveSize = isDesktop(layout) ? "sm" : "lg";
+  const [pageSize, setPageSize] = useState(5);
 
   const tableRows = useMemo(
     () =>
@@ -63,7 +59,28 @@ const PatientAppointmentsTable: React.FC<AppointmentTableProps> = ({
       }),
     [appointments]
   );
-  //const basename = useMemo(() => window.getOpenmrsSpaBase() + "opencare", []);
+
+  const mapAppointments = useMemo(() => {
+    const map = new Map();
+    appointments.forEach((appointment) => {
+      map.set(appointment.uuid, appointment);
+    });
+    return map;
+  }, [appointments]);
+
+  const { results, goTo, currentPage } = usePagination(tableRows, pageSize);
+
+  const tableHeaders: Array<typeof DataTableHeader> = useMemo(
+    () => [
+      { key: "date", header: t("date", "Date") },
+      { key: "location", header: t("location", "Location") },
+      { key: "service", header: t("service", "Service") },
+      { key: "status", header: t("status", "Status") },
+      { key: "type", header: t("type", "Type") },
+      { key: "notes", header: t("notes", "Notes") },
+    ],
+    [t]
+  );
 
   const HandleJoin = useCallback(
     (appointment) => {
@@ -73,12 +90,12 @@ const PatientAppointmentsTable: React.FC<AppointmentTableProps> = ({
   );
 
   return (
-    <div style={{ marginBottom: "1rem" }}>
+    <Layer style={{ marginBottom: "1rem" }}>
       <DataTable
-        rows={tableRows}
+        rows={results}
         headers={tableHeaders}
         isSortable
-        size={isTablet ? "lg" : "sm"}
+        size={responsiveSize}
         useZebraStyles
       >
         {({ rows, headers, getHeaderProps, getTableProps }) => (
@@ -115,7 +132,7 @@ const PatientAppointmentsTable: React.FC<AppointmentTableProps> = ({
                       <Button
                         size="small"
                         onClick={() => {
-                          HandleJoin(appointments[i]);
+                          HandleJoin(mapAppointments.get(row.id));
                         }}
                       >
                         Joindre
@@ -128,7 +145,17 @@ const PatientAppointmentsTable: React.FC<AppointmentTableProps> = ({
           </TableContainer>
         )}
       </DataTable>
-    </div>
+      <Pagination
+        page={currentPage}
+        pageSize={pageSize}
+        pageSizes={getPageSizes(results, 5) ?? []}
+        onChange={({ page, pageSize }) => {
+          goTo(page);
+          setPageSize(pageSize);
+        }}
+        totalItems={results.length}
+      />
+    </Layer>
   );
 };
 

@@ -37,16 +37,7 @@ class DoctorService {
    */
   async getDemands(istoday = false): Promise<Array<any>> {
     try {
-      return await this.opencare_rep.getDemands().then((demands) => {
-        return demands.map((demand) => {
-          return {
-            ...demand,
-            date: formatDatetime(parseDate(demand.date), {
-              mode: "wide",
-            }),
-          };
-        });
-      });
+      return await this.opencare_rep.getDemands();
     } catch (error) {
       /* console.log(error); */
       return null;
@@ -109,7 +100,7 @@ class DoctorService {
           const dateappt = new Date(appointment.startDateTime);
 
           // eslint-disable-next-line no-console
-          console.log(` comp : ${dateappt} - ${datenow}`);
+          // console.log(` comp : ${dateappt} - ${datenow}`);
 
           if (dateappt > datenow) {
             upcoming.push({
@@ -118,9 +109,9 @@ class DoctorService {
             });
           } else {
             if (
-              dateappt.getDay() == datenow.getDay() &&
-              dateappt.getMonth() == datenow.getMonth() &&
-              dateappt.getFullYear() == datenow.getFullYear()
+              dateappt.getDate() === datenow.getDate() &&
+              dateappt.getMonth() === datenow.getMonth() &&
+              dateappt.getFullYear() === datenow.getFullYear()
             ) {
               today.push({
                 ...appointment,
@@ -140,7 +131,8 @@ class DoctorService {
       appointments.set(AppointmentTypes.TODAY, today);
       appointments.set(AppointmentTypes.UPCOMING, upcoming);
 
-      /* console.log(appointments); */
+      // eslint-disable-next-line no-console
+      // console.log(appointments);
 
       return appointments;
     } catch (error) {

@@ -31,11 +31,12 @@ $color-blue-10: #edf5ff;
   width: 100%;
   height: 550px;
 }
-.contentSwitcherWrapper > div > button {
+
+.contentSwitcherWrapper>div>button {
   background-color: $ui-02;
 }
 
-.contentSwitcherWrapper > div button:first-child {
+.contentSwitcherWrapper>div button:first-child {
   border-top: 1px solid $color-blue-30;
   border-bottom: 1px solid $color-blue-30;
   border-left: 1px solid $color-blue-30;
@@ -43,7 +44,7 @@ $color-blue-10: #edf5ff;
   border-radius: spacing.$spacing-02 0 0px spacing.$spacing-02;
 }
 
-.contentSwitcherWrapper > div button:last-child {
+.contentSwitcherWrapper>div button:last-child {
   border-top: 1px solid $color-blue-30;
   border-bottom: 1px solid $color-blue-30;
   border-right: 1px solid $color-blue-30;
@@ -51,23 +52,23 @@ $color-blue-10: #edf5ff;
   border-radius: 0px spacing.$spacing-02 spacing.$spacing-02 0px;
 }
 
-.contentSwitcherWrapper > div > button[aria-selected='true'],
-.contentSwitcherWrapper > div > button[aria-selected='true']:first-child {
+.contentSwitcherWrapper>div>button[aria-selected='true'],
+.contentSwitcherWrapper>div>button[aria-selected='true']:first-child {
   background-color: $color-blue-10;
   color: $color-blue-60-2;
   border-color: $color-blue-60-2;
   border-right: 1px solid $color-blue-60-2;
 }
 
-.contentSwitcherWrapper > div > button[aria-selected='true'],
-.contentSwitcherWrapper > div > button[aria-selected='true']:last-child {
+.contentSwitcherWrapper>div>button[aria-selected='true'],
+.contentSwitcherWrapper>div>button[aria-selected='true']:last-child {
   background-color: $color-blue-10;
   color: $color-blue-60-2;
   border-color: $color-blue-60-2;
   border-left: 1px solid $color-blue-60-2;
 }
 
-.contentSwitcherWrapper > div > button[aria-selected='true']:focus {
+.contentSwitcherWrapper>div>button[aria-selected='true']:focus {
   box-shadow: none;
 }
 

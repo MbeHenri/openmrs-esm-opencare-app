@@ -4,6 +4,7 @@ import {
   Button,
   DataTable,
   DataTableSkeleton,
+  type DataTableHeader,
   Layer,
   Table,
   TableBody,
@@ -13,6 +14,7 @@ import {
   TableHeader,
   TableRow,
   Tile,
+  Pagination,
 } from "@carbon/react";
 
 import {
@@ -22,26 +24,29 @@ import {
   showToast,
   useConfig,
   useLayoutType,
+  formatDatetime,
+  parseDate,
+  usePagination,
 } from "@openmrs/esm-framework";
 import { EmptyLayout } from "../EmptyLayout";
 import styles from "./tab.scss";
 import DoctorService from "../../services/doctor";
 import env from "../../repositories/env";
-
-const headers = [
-  { key: "patient", header: "Patient" },
-  { key: "service", header: "Service" },
-  { key: "date", header: "Date" },
-  { key: "action", header: "Action" },
-];
+import { Search } from "@carbon/react";
+import { useTranslation } from "react-i18next";
+import { getPageSizes } from "../../utils";
 
 const DemandTab: React.FC = (/* {} */) => {
   //I. hooks
   const [loading, setLoading] = useState(true);
+  const { t } = useTranslation();
   const [error, setError] = useState(false);
   const layout = useLayoutType();
   const responsiveSize = isDesktop(layout) ? "sm" : "lg";
   const [demands, setDemands] = useState([]);
+  const [searchString, setSearchString] = useState("");
+  const [processing, setProcessing] = useState(false);
+  const [pageSize, setPageSize] = useState(5);
 
   //recupération de la configuration
   const conf = useConfig();
@@ -56,7 +61,19 @@ const DemandTab: React.FC = (/* {} */) => {
   const doctorService = useMemo(() => DoctorService.getInstance(), []);
 
   //const [reload, setReload] = useState("");
+  // colonnes du tableau
+  const headers: Array<typeof DataTableHeader> = useMemo(
+    () => [
+      { key: "numero", header: "N°" },
+      { key: "patient", header: "Patient" },
+      { key: "service", header: "Service" },
+      { key: "date", header: "Date" },
+      { key: "action", header: "Action" },
+    ],
+    []
+  );
 
+  // chargement des démandes
   useEffect(() => {
     const fun = async () => {
       setLoading(true);
@@ -80,7 +97,46 @@ const DemandTab: React.FC = (/* {} */) => {
     return () => {};
   }, [doctorService]);
 
-  const [processing, setProcessing] = useState(false);
+  // filtrage et formatage des demandes
+  const mapDemands = useMemo(() => {
+    const map = new Map();
+    demands.forEach((demand) => {
+      map.set(demand.id, demand);
+    });
+    return map;
+  }, [demands]);
+
+  const tableRows = useMemo(
+    () =>
+      demands
+        .map((demand, i) => {
+          return {
+            ...demand,
+            date: formatDatetime(parseDate(demand.date), {
+              mode: "wide",
+            }),
+            numero: i + 1,
+          };
+        })
+        .filter((demand) => {
+          if (searchString === "") {
+            return true;
+          }
+          if (demand.date && `${demand.date}`.includes(searchString)) {
+            return true;
+          }
+          if (demand.service && `${demand.service}`.includes(searchString)) {
+            return true;
+          }
+          return false;
+        }),
+    [demands, searchString]
+  );
+
+  // pagination des demandes
+  const { results, goTo, currentPage } = usePagination(tableRows, pageSize);
+
+  // fonction de rejet
   const handleReject = useCallback(
     async (demand) => {
       if (!processing) {
@@ -108,6 +164,7 @@ const DemandTab: React.FC = (/* {} */) => {
     [doctorService, processing]
   );
 
+  // fonction de validation
   const handleValidate = useCallback(
     async (demand) => {
       if (!processing) {
@@ -159,9 +216,22 @@ const DemandTab: React.FC = (/* {} */) => {
         >
           <h4>Demands</h4>
         </div>
+        <span className={styles.totalDemand}>
+          Total :
+          <span className={styles.totalDemandLength}>{demands.length}</span>
+        </span>
       </Tile>
+      <div className={styles.toolbar}>
+        <Search
+          className={styles.searchbar}
+          labelText=""
+          placeholder={t("filterTable", "Filter table")}
+          onChange={(event) => setSearchString(event.target.value)}
+          size={responsiveSize}
+        />
+      </div>
       <DataTable
-        rows={demands}
+        rows={results}
         headers={headers}
         isSortable
         size={responsiveSize}
@@ -188,7 +258,7 @@ const DemandTab: React.FC = (/* {} */) => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {rows.map((row, i) => (
+                  {rows.map((row) => (
                     <TableRow {...getRowProps({ row })}>
                       {row.cells.map((cell) => (
                         <TableCell key={cell.id}>
@@ -201,7 +271,7 @@ const DemandTab: React.FC = (/* {} */) => {
                                 size="small"
                                 disable={processing}
                                 onClick={() => {
-                                  handleReject(demands[i]);
+                                  handleReject(mapDemands.get(row.id));
                                 }}
                               >
                                 Reject
@@ -211,7 +281,7 @@ const DemandTab: React.FC = (/* {} */) => {
                                 size="small"
                                 disable={processing}
                                 onClick={() => {
-                                  handleValidate(demands[i]);
+                                  handleValidate(mapDemands.get(row.id));
                                 }}
                               >
                                 Validation
@@ -228,6 +298,16 @@ const DemandTab: React.FC = (/* {} */) => {
           </>
         )}
       </DataTable>
+      <Pagination
+        page={currentPage}
+        pageSize={pageSize}
+        pageSizes={getPageSizes(tableRows, 5) ?? []}
+        onChange={({ page, pageSize }) => {
+          goTo(page);
+          setPageSize(pageSize);
+        }}
+        totalItems={tableRows.length}
+      />
     </Layer>
   );
 };

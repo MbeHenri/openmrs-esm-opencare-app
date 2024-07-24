@@ -2,7 +2,7 @@
 
 ![Node.js CI](https://github.com/openmrs/openmrs-esm-template-app/workflows/Node.js%20CI/badge.svg)
 
-This repository provides a starting point for creating a 
+This repository provides a starting point for creating a
 [OpenMRS Microfrontend](https://wiki.openmrs.org/display/projects/OpenMRS+3.0%3A+A+Frontend+Framework+that+enables+collaboration+and+better+User+Experience).
 
 For more information, please see the
