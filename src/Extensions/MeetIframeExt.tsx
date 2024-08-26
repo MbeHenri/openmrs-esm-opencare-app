@@ -8,7 +8,7 @@ interface Props {
 }
 
 const MeetIframeExt: React.FC<Props> = ({ url }) => {
-  return <MeetIframe url={url} />;
+  return <MeetIframe url={url} username="" token="" />;
 };
 
 export default MeetIframeExt;
