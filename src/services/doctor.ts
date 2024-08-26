@@ -148,6 +148,15 @@ class DoctorService {
       return null;
     }
   }
+
+  /**
+   * get a token for accessing to nextcloud
+   * @param istoday today boolean
+   * @returns
+   */
+  async getTokenNextcloud(username: string): Promise<string> {
+    return await this.opencare_rep.getTokenNextcloud(username);
+  }
 }
 
 export default DoctorService;

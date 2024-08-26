@@ -21,6 +21,10 @@ class OpencareRepository {
   async getProviders(): Promise<Array<any>> {
     return [];
   }
+
+  async getTokenNextcloud(username: string): Promise<any> {
+    return "TALK_PASSWORD";
+  }
 }
 
 export default OpencareRepository;

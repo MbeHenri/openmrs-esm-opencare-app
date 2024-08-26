@@ -8,8 +8,10 @@ import {
   Tile,
 } from "@carbon/react";
 import {
+  getCurrentUser,
   useConfig,
   useLayoutType,
+  useSession,
   //launchWorkspaces
 } from "@openmrs/esm-framework";
 import PatientAppointmentsTable from "./tab";
@@ -36,6 +38,10 @@ const PatientAppointmentsBase: React.FC<PatientAppointmentsBaseProps> = ({
   const [appointments, setAppointments] = useState<Map<number, Array<any>>>(
     new Map()
   );
+
+  const [tokenNextcloud, setTokenNextcloud] = useState("");
+
+  const { user } = useSession();
 
   const [url, setUrl] = useState("");
 
@@ -74,7 +80,31 @@ const PatientAppointmentsBase: React.FC<PatientAppointmentsBaseProps> = ({
     return () => {};
   }, [doctorService, patientUuid]);
 
+  useEffect(() => {
+    const fun = async () => {
+      setLoading(true);
+      setError(false);
+      await doctorService
+        .getAppointments(patientUuid)
+        .then((appointments) => {
+          if (appointments) {
+            setAppointments(appointments);
+          } else {
+            setError(true);
+          }
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    };
+    fun();
+
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    return () => {};
+  }, [doctorService, patientUuid]);
+
   const handleUrlMeeting = useCallback((url: string) => {
+    setUrl("");
     setUrl(url);
     /* launchWorkspace("opencare-meet-iframe", {
       url,
@@ -167,7 +197,13 @@ const PatientAppointmentsBase: React.FC<PatientAppointmentsBaseProps> = ({
 
       {(() => {
         if (url != "") {
-          return <MeetIframe url={url} />;
+          return (
+            <MeetIframe
+              url={url}
+              username={user.username}
+              token={tokenNextcloud}
+            />
+          );
         }
       })()}
     </>
