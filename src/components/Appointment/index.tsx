@@ -104,7 +104,6 @@ const PatientAppointmentsBase: React.FC<PatientAppointmentsBaseProps> = ({
   }, [doctorService, patientUuid]);
 
   const handleUrlMeeting = useCallback((url: string) => {
-    setUrl("");
     setUrl(url);
     /* launchWorkspace("opencare-meet-iframe", {
       url,

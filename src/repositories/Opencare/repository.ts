@@ -22,6 +22,7 @@ class OpencareRepository {
     return [];
   }
 
+  // must be different for production for the time of the appointment
   async getTokenNextcloud(username: string): Promise<any> {
     return "TALK_PASSWORD";
   }

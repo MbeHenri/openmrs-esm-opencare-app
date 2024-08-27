@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import styles from "./index.scss";
 
 interface MeetIframeProps {
@@ -13,6 +13,8 @@ export const MeetIframe: React.FC<MeetIframeProps> = ({
   username,
 }) => {
   const iframeRef = useRef<HTMLIFrameElement>(null);
+
+  const [showPreloader, setShowPreloader] = useState(false);
 
   const handleLoad = useCallback(() => {
     try {
@@ -45,16 +47,26 @@ export const MeetIframe: React.FC<MeetIframeProps> = ({
 
         /* console.log("Formulaire de connexion soumis."); */
       } else {
-        console.error("Champs de formulaire introuvables dans l'iframe.");
+        console.error(
+          "Champs de formulaire introuvables dans l'iframe chargeant l'url " +
+            url
+        );
       }
     } catch (error) {
-      console.error("Erreur lors de l'accès au contenu de l'iframe :", error);
+      console.error(
+        "Erreur lors de l'accès au contenu de l'iframe chargeant l'url " +
+          url +
+          " :",
+        error
+      );
     }
-  }, [token, username]);
+    setShowPreloader(false);
+  }, [token, username, url]);
 
   useEffect(() => {
     const iframe = iframeRef.current;
     if (iframe) {
+      setShowPreloader(true);
       // Associer l'événement de chargement
       iframe.addEventListener("load", handleLoad);
 
@@ -67,7 +79,12 @@ export const MeetIframe: React.FC<MeetIframeProps> = ({
 
   return (
     <div className={styles.contentViewWrapper}>
-      <span className={styles.spinner}></span>
+      <div
+        className={styles.preloader}
+        style={{ display: showPreloader ? "block" : "none" }}
+      >
+        <span className={styles.spinner}></span>
+      </div>
       <iframe
         ref={iframeRef}
         className={styles.viewer}
