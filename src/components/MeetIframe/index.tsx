@@ -25,6 +25,7 @@ export const MeetIframe: React.FC<MeetIframeProps> = ({
           const iframeWindow = iframe.contentWindow;
           if (!iframeWindow) {
             console.error("Impossible d'accéder à la fenêtre de l'iframe.");
+            setShowPreloader(false);
             return;
           }
 
@@ -48,9 +49,9 @@ export const MeetIframe: React.FC<MeetIframeProps> = ({
             loginForm.submit();
             // on affiche le preloader
 
-            setShowPreloader(true);
             // eslint-disable-next-line no-console
             console.log("Formulaire de connexion soumis.");
+            setShowPreloader(false);
             //console.log('username', userInput.value, 'password', passwordInput.value);
           } else {
             setShowPreloader(false);

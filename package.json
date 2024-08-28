@@ -1,6 +1,6 @@
 {
   "name": "@mbehenri/openmrs-esm-opencare-app",
-  "version": "1.2",
+  "version": "1.2.4",
   "license": "MPL-2.0",
   "description": "The OpenMRS Opencare application (micro front-end)",
   "browser": "dist/openmrs-esm-opencare-app.js",

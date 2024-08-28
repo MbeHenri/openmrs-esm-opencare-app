@@ -57,6 +57,7 @@ const PatientAppointmentsBase: React.FC<PatientAppointmentsBaseProps> = ({
   env.API_SECURE = conf["API_SECURE"];
   const doctorService = useMemo(() => DoctorService.getInstance(), []);
 
+  // chargement des appointements
   useEffect(() => {
     const fun = async () => {
       setLoading(true);
@@ -85,17 +86,11 @@ const PatientAppointmentsBase: React.FC<PatientAppointmentsBaseProps> = ({
       setLoading(true);
       setError(false);
       await doctorService
-        .getAppointments(patientUuid)
-        .then((appointments) => {
-          if (appointments) {
-            setAppointments(appointments);
-          } else {
-            setError(true);
-          }
+        .getTokenNextcloud(patientUuid)
+        .then((token) => {
+          setTokenNextcloud(token);
         })
-        .finally(() => {
-          setLoading(false);
-        });
+        .catch((e) => console.error(e));
     };
     fun();
 
@@ -199,7 +194,7 @@ const PatientAppointmentsBase: React.FC<PatientAppointmentsBaseProps> = ({
           return (
             <MeetIframe
               url={url}
-              username={user.username}
+              username={user.display}
               token={tokenNextcloud}
             />
           );
