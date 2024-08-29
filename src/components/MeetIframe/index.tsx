@@ -31,6 +31,13 @@ export const MeetIframe: React.FC<MeetIframeProps> = ({
 
           const iframeDocument = iframeWindow.document;
 
+          /* const isLoggedIn = iframeDocument.querySelector(".user-menu");
+          if (isLoggedIn) {
+            //console.log("Utilisateur déjà connecté.");
+            setShowPreloader(false);
+            return; // Pas besoin de soumettre le formulaire
+          } */
+
           const userInput = iframeDocument.querySelector(
             'input[name="user"]'
           ) as HTMLInputElement | null;
@@ -45,13 +52,13 @@ export const MeetIframe: React.FC<MeetIframeProps> = ({
             userInput.value = username;
             passwordInput.value = token;
 
-            // Soumettre le formulaire
-            loginForm.submit();
-            // on affiche le preloader
-
-            // eslint-disable-next-line no-console
-            console.log("Formulaire de connexion soumis.");
-            setShowPreloader(false);
+            // Attendre 3 secondes avant de soumettre le formulaire
+            setTimeout(() => {
+              loginForm.submit();
+              // eslint-disable-next-line no-console
+              console.log("Formulaire de connexion soumis.");
+              setShowPreloader(false);
+            }, 3000); // Délai de 3 secondes
             //console.log('username', userInput.value, 'password', passwordInput.value);
           } else {
             setShowPreloader(false);
