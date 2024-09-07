@@ -5,7 +5,10 @@ class OpencareRepository {
     return [];
   }
 
-  async getAppointments(patientUuid: string): Promise<Array<any>> {
+  async getAppointments(
+    patientUuid: string,
+    doctor?: string
+  ): Promise<Array<any>> {
     return [];
   }
 
@@ -22,7 +25,7 @@ class OpencareRepository {
     return [];
   }
 
-  // must be different for production for the time of the appointment
+  // must be different for production for the duration of the appointment
   async getTokenNextcloud(username: string): Promise<any> {
     return "TALK_PASSWORD";
   }

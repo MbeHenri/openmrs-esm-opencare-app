@@ -87,13 +87,16 @@ class DoctorService {
    * @param patientUuid patient uuid
    * @returns
    */
-  async getAppointments(patientUuid: string): Promise<Map<number, Array<any>>> {
+  async getAppointments(
+    patientUuid: string,
+    doctor?: string
+  ): Promise<Map<number, Array<any>>> {
     try {
       const past = [];
       const today = [];
       const upcoming = [];
 
-      const res = await this.opencare_rep.getAppointments(patientUuid);
+      const res = await this.opencare_rep.getAppointments(patientUuid, doctor);
       let datenow = new Date();
       res.forEach((appointment, i) => {
         if (appointment.status != "Cancelled") {

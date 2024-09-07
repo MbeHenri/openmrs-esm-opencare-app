@@ -63,7 +63,7 @@ const PatientAppointmentsBase: React.FC<PatientAppointmentsBaseProps> = ({
       setLoading(true);
       setError(false);
       await doctorService
-        .getAppointments(patientUuid)
+        .getAppointments(patientUuid, user.person.uuid)
         .then((appointments) => {
           if (appointments) {
             setAppointments(appointments);
@@ -79,7 +79,7 @@ const PatientAppointmentsBase: React.FC<PatientAppointmentsBaseProps> = ({
 
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     return () => {};
-  }, [doctorService, patientUuid]);
+  }, [doctorService, patientUuid, user.person.uuid]);
 
   useEffect(() => {
     const fun = async () => {

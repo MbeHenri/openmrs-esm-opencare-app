@@ -33,7 +33,10 @@ class ProdOpencareRepository extends OpencareRepository {
       });
   }
 
-  async getAppointments(patientUuid: string): Promise<Array<any>> {
+  async getAppointments(
+    patientUuid: string,
+    doctor?: string
+  ): Promise<Array<any>> {
     let myHeaders = new Headers();
     myHeaders.append("Accept", "application/json,");
     myHeaders.append("Content-Type", "application/json");
@@ -45,7 +48,9 @@ class ProdOpencareRepository extends OpencareRepository {
     };
 
     return await fetch(
-      `${env.API_BASE_URL()}/patient/${patientUuid}/appointment`,
+      `${env.API_BASE_URL()}/patient/${patientUuid}/appointment${
+        doctor ? `?doctor=${doctor}` : ""
+      }`,
       requestOptions
     )
       .then((response) => {
