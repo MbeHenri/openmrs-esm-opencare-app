@@ -33,7 +33,7 @@ export const MeetIframe: React.FC<MeetIframeProps> = ({
         const isLoggedIn = iframeDocument.querySelector(".user-menu");
         if (isLoggedIn) {
           //console.log("Utilisateur déjà connecté.");
-          setShowPreloader(false);
+          //setShowPreloader(false);
           return; // Pas besoin de soumettre le formulaire
         }
 
@@ -58,13 +58,12 @@ export const MeetIframe: React.FC<MeetIframeProps> = ({
             console.log("Formulaire de connexion soumis.");
           }, 3000); // Délai de 3 secondes
           //console.log('username', userInput.value, 'password', passwordInput.value);
-        } else {
-          setShowPreloader(false);
+          return;
         }
       } catch (error) {
         console.error("Erreur lors de l'accès au contenu de l'iframe :", error);
-        setShowPreloader(false);
       }
+      //setShowPreloader(false);
     },
     [token, username]
   );
@@ -73,9 +72,8 @@ export const MeetIframe: React.FC<MeetIframeProps> = ({
     async (iframe: HTMLIFrameElement) => {
       if (needContinue) {
         await handleLogin(iframe).finally(() => setNeedContinue(false));
-      } else {
-        setShowPreloader(false);
       }
+      setShowPreloader(false);
     },
     [handleLogin, needContinue]
   );
