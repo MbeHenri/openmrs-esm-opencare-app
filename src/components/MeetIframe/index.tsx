@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import styles from "./index.scss";
+import logo from "../../assets/img/Logo.png";
 
 interface MeetIframeProps {
   username: string;
@@ -57,6 +58,8 @@ export const MeetIframe: React.FC<MeetIframeProps> = ({
             console.log("Formulaire de connexion soumis.");
           }, 3000); // Délai de 3 secondes
           //console.log('username', userInput.value, 'password', passwordInput.value);
+        } else {
+          setShowPreloader(false);
         }
       } catch (error) {
         console.error("Erreur lors de l'accès au contenu de l'iframe :", error);
@@ -97,9 +100,10 @@ export const MeetIframe: React.FC<MeetIframeProps> = ({
     <div className={styles.contentViewWrapper}>
       <div
         className={styles.preloader}
-        style={{ display: showPreloader ? "block" : "none" }}
+        style={{ display: showPreloader ? "flex" : "none" }}
       >
         <span className={styles.spinner}></span>
+        <img src={logo} alt="opencare logo" className="logo" />
       </div>
       <iframe
         ref={iframeRef}
